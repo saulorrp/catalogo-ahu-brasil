@@ -642,6 +642,5 @@ textarea { width: 100%; font-family: var(--mono); margin-bottom: 8px; }
 
 /* Tradução inglesa do MAPE: recolhida, abaixo do resumo, com o crédito junto. */
 .traducao-en { margin: 10px 0 14px; }
-.traducao-en > summary { cursor: pointer; font-size: 0.9rem; color: var(--txt-secondary, inherit); }
 .traducao-en-texto { font-family: var(--serifa); line-height: 1.6; margin: 8px 0 4px; }
 .traducao-en-credito { font-size: 0.8rem; color: var(--txt-secondary, inherit); margin: 0; }
