@@ -1,0 +1,208 @@
+"""Testes do link da busca: abrir um link copiado reproduz a mesma lista, na mesma ordem.
+
+Isso é verificado com
+**cinco buscas variadas**, de ponta a ponta: a `Consulta` vira URL, a URL volta a `Consulta`, e a
+busca executada com a consulta que voltou devolve a mesma lista, na mesma ordem, na mesma página.
+"""
+from urllib.parse import parse_qs, urlsplit
+
+import pytest
+
+from ahu.consulta import Consulta, executar, para_query, url_da_busca
+from ahu.dados import carregar_sem_cache
+from ahu.filtros import Filtros
+from tests.conftest import APP_DADOS, tem_artefatos
+
+
+@pytest.fixture(scope="module")
+def corpus_real():
+    return carregar_sem_cache(APP_DADOS)
+
+
+# Cinco buscas variadas: texto simples, frase entre aspas, cota, filtros com página, e uma
+# consulta vazia só com filtros — cada uma exercita um pedaço diferente da URL.
+CINCO_BUSCAS = (
+    Consulta(texto="deserção de soldados", modo="automatico"),
+    Consulta(texto='"obras do porto"', modo="exata", rigor="alto", ordenacao="ano_asc"),
+    Consulta(texto="AHU_ACL_CU_017, Cx. 5, D. 487", modo="exata"),
+    Consulta(texto="gado", modo="conceitual", rigor="baixo",
+             filtros=Filtros(pastas=["Bahia"], ano_de=1700), pagina=2),
+    Consulta(filtros=Filtros(tipologias=["CARTA"], ano_de=1770, ano_ate=1780, sem_data=False),
+             ordenacao="ano_desc"),
+)
+
+
+def _de_url(url: str) -> Consulta:
+    """Lê a consulta de um link, como o app faz com `st.query_params`."""
+    return Consulta.de_url({k: v[0] for k, v in parse_qs(urlsplit(url).query).items()})
+
+
+# ---------------------------------------------------------------------------
+# A URL
+# ---------------------------------------------------------------------------
+
+def test_link_relativo_quando_nao_se_sabe_o_endereco():
+    c = Consulta(texto="gado")
+    assert url_da_busca(c) == para_query(c) == "?v=2&q=gado"
+
+
+def test_link_absoluto_substitui_a_query_antiga():
+    c = Consulta(texto="gado")
+    url = url_da_busca(c, "https://catalogo.exemplo.org/?v=2&q=outra&p=9")
+    assert url == "https://catalogo.exemplo.org/?v=2&q=gado"
+    assert "outra" not in url and "p=9" not in url
+
+
+def test_link_absoluto_em_localhost_preserva_o_caminho():
+    url = url_da_busca(Consulta(texto="gado"), "http://localhost:8501/")
+    assert url.startswith("http://localhost:8501/?v=2")
+
+
+def test_consulta_padrao_leva_so_a_versao():
+    """um link de busca não carrega estado morto."""
+    assert url_da_busca(Consulta()) == "?v=2"
+
+
+@pytest.mark.parametrize("consulta", CINCO_BUSCAS, ids=lambda c: (c.texto or "só filtros")[:24])
+def test_a6_a_consulta_volta_igual_do_link(consulta):
+    """A ida e volta, campo por campo, nas cinco buscas."""
+    volta = _de_url(url_da_busca(consulta, "https://exemplo.app/"))
+    assert volta == consulta
+
+
+@pytest.mark.parametrize("consulta", CINCO_BUSCAS, ids=lambda c: (c.texto or "só filtros")[:24])
+def test_a6_o_link_reproduz_a_mesma_lista_na_mesma_ordem(corpus_busca, encoder, consulta):
+    """A6 de ponta a ponta no corpus de mentira: mesma lista, mesma ordem, mesma página."""
+    antes = executar(corpus_busca, consulta, encoder=encoder)
+    depois = executar(corpus_busca, _de_url(url_da_busca(consulta)), encoder=encoder)
+
+    assert depois.total == antes.total
+    assert [r.doc_uid for r in depois.resultados] == [r.doc_uid for r in antes.resultados]
+    assert [r.posicao for r in depois.resultados] == [r.posicao for r in antes.resultados]
+    pagina = consulta.pagina
+    assert ([r.doc_uid for r in depois.pagina(pagina, 25)]
+            == [r.doc_uid for r in antes.pagina(pagina, 25)])
+
+
+
+
+def test_link_com_parametro_estranho_e_recusado():
+    from ahu.consulta import ErroDeLink
+
+    with pytest.raises(ErroDeLink, match="parâmetros desconhecidos"):
+        _de_url("https://exemplo.app/?v=2&q=gado&bisbilhoteiro=1")
+
+
+# ---------------------------------------------------------------------------
+# Nos dados de verdade
+# ---------------------------------------------------------------------------
+
+@pytest.mark.skipif(not tem_artefatos, reason="app_dados/ ainda não construído")
+@pytest.mark.parametrize("consulta", CINCO_BUSCAS, ids=lambda c: (c.texto or "só filtros")[:24])
+def test_a6_nos_dados_reais_sem_carregar_o_modelo(corpus_real, consulta):
+    """O A6 no corpus de verdade. Só o motor léxico, para não baixar o e5 no gate."""
+    so_lexica = Consulta(**{**{f.name: getattr(consulta, f.name)
+                               for f in consulta.__dataclass_fields__.values()},
+                            "modo": "exata"})
+    antes = executar(corpus_real, so_lexica)
+    depois = executar(corpus_real, _de_url(url_da_busca(so_lexica, "https://exemplo.app/")))
+    assert depois.total == antes.total
+    assert [r.doc_uid for r in depois.resultados] == [r.doc_uid for r in antes.resultados]
+
+
+
+
+# --- Projeto Resgate: link por documento (quadro do DocReader) ---------------------------------
+
+def test_resgate_com_quadro_abre_a_imagem_do_documento():
+    from ahu import links
+
+    doc = {"new_code": "AHU_ACL_CU_021, Cx. 1, D. 4.", "resgate_docreader": "021_SC#37"}
+    destino = links.do_documento(doc)
+    assert destino["resgate"] == ("https://resgate.bn.gov.br/docreader/DocReader.aspx"
+                                  "?bib=021_SC&hf=resgate.bn.gov.br&pagfis=37")
+    assert destino["resgate_rotulo"] == "Imagem no Projeto Resgate"
+    assert destino["resgate_direto"] is True
+
+
+def test_resgate_sem_quadro_vai_ao_portal():
+    from ahu import links
+
+    destino = links.do_documento({"new_code": "AHU_ACL_CU_017, Cx. 69, D. 6420."})
+    assert destino["resgate"] == links.RESGATE
+    assert destino["resgate_rotulo"] == "Portal do Projeto Resgate"
+    assert destino["resgate_direto"] is False
+    assert links.resgate("lixo") == links.RESGATE
+
+
+def test_ajustar_encaixa_o_quadro_pela_referencia():
+    import pandas as pd
+
+    from build import cotas
+
+    base = pd.DataFrame({"new_code": ["AHU_ACL_CU_021, Cx. 1, D. 4.", "AHU_ACL_CU_017, Cx. 1, D. 1."],
+                         "reference_code": [None, None]})
+    saida, contagem = cotas.ajustar(base, None, {"PT/AHU/CU/021/0001/00004": "021_SC#37"})
+    assert saida["resgate_docreader"].tolist() == ["021_SC#37", None]
+    assert contagem["resgate_com_quadro"] == 1
+
+
+def test_indice_do_resgate_tem_o_quadro_achado_pela_varredura():
+    """RJ não tem catálogo em HTML: o quadro vem da varredura do DocReader (conferido no navegador)."""
+    from pathlib import Path
+
+    from build import cotas
+
+    indice = cotas.ler_docreader(Path(__file__).resolve().parents[1] / "corpus" / "resgate_docreader.tsv.gz")
+    assert indice["PT/AHU/CU/017/0069/06420"] == "017_RJ_AV#49044"
+    assert indice["PT/AHU/CU/021/0001/00004"] == "021_SC#37"
+    assert indice["PT/AHU/CU/011/0002/00075"] == "011_MG#440"
+    assert indice["PT/AHU/CU/017-001/0001/00001"] == "017-1_RJ#1"
+    assert indice["PT/AHU/CU/023-001/0001/00001"] == "023-1_SP_MG#186"
+    assert indice["PT/AHU/CU/035/0001/00001"] == "089_UL_AV#1"
+    assert indice["PT/AHU/CU/089/0001/00001"] == "089_CU#1"
+    assert indice["PT/AHU/CU/022/0001/00001"] == "022_SE#1"
+    assert indice["PT/AHU/CU/022/0001/00004"] == "022_SE#64"
+
+
+def test_rolo_da_colonia_do_sacramento_separa_as_series_pelo_rotulo():
+    """O 012_CSRP mistura as séries 012, 059, 065, 066 e 071 com a mesma numeração (auditoria de
+    17/11/2026). Cada documento vai para a série do rótulo da BN, conferido no DocReader."""
+    from pathlib import Path
+
+    from build import cotas
+
+    indice = cotas.ler_docreader(Path(__file__).resolve().parents[1] / "corpus" / "resgate_docreader.tsv.gz")
+    # p. 30 é "AHU_ACL_CU_066, Cx. 1\Doc. 7": antes ia para a 012 por engano.
+    assert indice["PT/AHU/CU/066/0001/00007"] == "012_CSRP#30"
+    assert indice["PT/AHU/CU/012/0001/00007"] == "012_CSRP#2751"
+    assert indice["PT/AHU/CU/059/0001/00031"] == "012_CSRP#352"
+    series = {ref.split("/")[3] for ref, quadro in indice.items() if quadro.startswith("012_CSRP#")}
+    assert series == {"012", "059", "065", "066", "071"}
+
+
+def test_capilha_so_liga_os_numeros_que_o_gemini_confirma():
+    """A Fase 2 ligava todo número que o Tesseract via na capilha, mesmo fora da faixa lida pelo
+    Gemini (auditoria de 17/11/2026: 20.308 na capilha de 20.300–20.303)."""
+    import importlib.util
+    from pathlib import Path
+
+    caminho = Path(__file__).resolve().parents[1] / "coleta" / "scripts" / "juntar_capilhas.py"
+    spec = importlib.util.spec_from_file_location("juntar_capilhas", caminho)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    r = {"gem_json": {"docs_explicitos": [20300, 20301], "faixa_inicio": 20300, "faixa_fim": 20303}}
+    assert mod.doc_confirmado(r, 20302)
+    assert not mod.doc_confirmado(r, 20308)
+    assert not mod.doc_confirmado({"gem_json": {"docs_explicitos": [12703]}}, 12708)
+    assert mod.doc_confirmado({"tess_docs": [5]}, 5)  # sem leitura do Gemini, vale o Tesseract
+
+    from build import cotas
+
+    indice = cotas.ler_docreader(Path(__file__).resolve().parents[1] / "corpus" / "resgate_docreader.tsv.gz")
+    for ref in ("PT/AHU/CU/005-001/0104/20308", "PT/AHU/CU/005-001/0070/13432",
+                "PT/AHU/CU/005-001/0066/12708", "PT/AHU/CU/005-001/0117/23004"):
+        assert ref not in indice
+    # As duplicatas do catálogo recebem o link do par (rótulo da BN: Cx. 7; série 016).
+    assert indice["PT/AHU/CU/010/0007/00434"] == indice["PT/AHU/CU/010/0006/00434"] == "010_MT#3466"
+    assert indice["PT/AHU/CU/016/0008/00450"] == indice["PT/AHU/CU/018/0008/00450"] == "016_PI#4691"

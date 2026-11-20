@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block aba %}conversor{% endblock %}
+{% block title %}Conversor · Catálogo AHU{% endblock %}
+{% block content %}
+<h1>Conversor de cotas</h1>
+<p class="lide">Cole uma cota em qualquer formato — código de referência, código atual ou código antigo — e o tipo é reconhecido sozinho.</p>
+
+<form method="get" action="{{ url_for('conversor') }}" class="busca-bar conversor-bar">
+    <input type="search" name="q" value="{{ q }}" placeholder="Ex.: AHU_ACL_CU_019, Cx. 3, D. 246" aria-label="Cota">
+    <button type="submit" class="btn btn-primario">Converter</button>
+</form>
+
+{% if q and conversoes %}
+    {% set c = conversoes[0] %}
+    <div class="resultado-card conversao">
+        <p class="rotulo">Reconhecido como <strong>{{ c.familia }}</strong>, convertido por {{ c.como }}.</p>
+        <dl class="cota-list">
+            <dt class="rotulo">Código de referência</dt><dd class="cota">{{ c.referencia or '—' }}</dd>
+            <dt class="rotulo">Código atual</dt><dd class="cota">{{ c.resgate or '—' }}</dd>
+            <dt class="rotulo">Código antigo</dt><dd class="cota">{{ c.antiga or '—' }}</dd>
+        </dl>
+        {% for aviso in c.avisos %}
+        <p class="aviso">{{ aviso }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<details class="gaveta">
+    <summary>Converter várias cotas de uma vez</summary>
+    <div class="gaveta-content">
+        <form method="get" action="{{ url_for('conversor') }}">
+            <textarea name="lote" rows="6" style="width: 100%;" placeholder="Uma cota por linha">{{ lote }}</textarea>
+            <button type="submit">Converter lote</button>
+        </form>
+        {% if lote and conversoes %}
+        <div class="tabela-rolagem"><table class="tabela">
+            <tr><th>Entrada</th><th>Como</th><th>Código de referência</th><th>Código atual</th><th>Código antigo</th><th>Avisos</th></tr>
+            {% for c in conversoes %}
+            <tr>
+                <td>{{ c.entrada }}</td>
+                <td>{{ c.como }}</td>
+                <td>{{ c.referencia or '—' }}</td>
+                <td>{{ c.resgate or '—' }}</td>
+                <td>{{ c.antiga or '—' }}</td>
+                <td>{{ c.avisos|join(' ') }}</td>
+            </tr>
+            {% endfor %}
+        </table></div>
+        {% endif %}
+    </div>
+</details>
+
+<details class="gaveta">
+    <summary>A cifra série-estado</summary>
+    <div class="gaveta-content">
+        <table class="tabela">
+            <tr><th>Série</th><th>Estado</th><th>Na cota antiga</th><th>Cota antiga convertível</th></tr>
+            {% for s in cifra %}
+            <tr>
+                <td>{{ s['Série'] }}</td>
+                <td>{{ s['Estado'] }}</td>
+                <td>{{ s['Na cota antiga'] }}</td>
+                <td>{{ s['Cota antiga convertível'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</details>
+{% endblock %}

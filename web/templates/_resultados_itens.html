@@ -1,0 +1,68 @@
+{% for r, f in fichas %}
+{% set uid = f.doc_uid %}
+{% set marcado = f.doc_uid in na_selecao %}
+{% set cota_principal = f.cotas.get('Código de referência', f.cotas.get('Código atual', f.cotas.get('Código antigo', ''))) %}
+<article class="resultado-card">
+    <details class="gaveta resultado-gaveta">
+        <summary class="resultado-summary">
+            <div class="resultado-sumario-corpo">
+                <header class="resultado-header">
+                    <span class="ano-destaque">{{ f.ano or 's/d' }}</span>
+                    {% if f.pasta %}<span class="resultado-pasta">{{ f.pasta }}</span>{% endif %}
+                    {% if f.tipologia %}<span class="resultado-tipologia">{{ f.tipologia }}</span>{% endif %}
+                    <span class="cota">{{ cota_principal }}</span>
+                </header>
+                <div class="resumo">{{ f.resumo_marcado | marcas | safe }}</div>
+            </div>
+        </summary>
+        <div class="gaveta-content resultado-detalhes">
+            {% if f.cotas %}
+            <div class="resultado-secao">
+                <h4>Cotas</h4>
+                <table class="cota-sheet">
+                    <tbody>
+                        {% for k, v in f.cotas.items() %}
+                        <tr>
+                            <th scope="row" class="cota-rotulo">{{ k }}</th>
+                            <td class="cota-valor"><span class="cota">{{ v }}</span></td>
+                            <td class="cota-acao">
+                                <button type="button" class="btn-icone btn-copiar" data-copiar="{{ v }}" title="Copiar {{ k }}" aria-label="Copiar {{ k }}">⧉</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            {% if f.links.digitarq or f.links.resgate %}
+            <div class="resultado-secao">
+                <h4>Onde ver o documento</h4>
+                <div class="links-sheet">
+                    {% if f.links.digitarq %}
+                    <a href="{{ f.links.digitarq }}" target="_blank" rel="noopener" class="links-sheet-btn">{{ f.links.digitarq_rotulo }}</a>
+                    {% endif %}
+                    {% if f.links.resgate_direto %}
+                    <a href="{{ f.links.resgate }}" target="_blank" rel="noopener" class="links-sheet-btn">Imagem no Projeto Resgate</a>
+                    {% elif f.links.resgate %}
+                    <span class="links-sheet-btn desativado" aria-disabled="true" title="Link direto da imagem no Projeto Resgate ainda não registrado para este documento">Imagem no Projeto Resgate</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="resultado-meta-acoes">
+                <a href="{{ email_de_documento(f.doc_uid, cota_principal, f.titulo) }}" class="btn-texto">Reportar erro</a>
+            </div>
+        </div>
+    </details>
+    <div class="resultado-acoes">
+        {% include "_botao_selecao.html" %}
+    </div>
+</article>
+{% else %}
+<div class="vazio">
+    <p><strong>Nenhum documento encontrado.</strong></p>
+    <p>Tente menos palavras, outra grafia, ou o modo <em>Conceitual</em>, que procura pelo sentido. Se há filtros marcados, experimente tirar algum.</p>
+</div>
+{% endfor %}

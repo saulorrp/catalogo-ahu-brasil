@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.venv/
+.env
+*.key
+*.pkl
+*.npy
+!app_dados/embeddings/*.npy
+!app_dados/lexico/*.npy
+!app_dados/estatico/*.npy
+
+# Cache de modelos ONNX, se algum dia cair dentro do repositório por engano.
+/C/
+modelos_onnx/
+*.onnx
