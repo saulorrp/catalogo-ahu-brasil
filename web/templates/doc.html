@@ -20,6 +20,7 @@
     <div class="doc-resumo resumo">
         {{ ficha.resumo_marcado | marcas | safe }}
     </div>
+    {% set ficha_en = ficha %}{% include "_traducao_en.html" %}
 
     <div class="doc-actions">
         {% set uid = ficha.doc_uid %}

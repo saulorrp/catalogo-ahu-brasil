@@ -32,3 +32,25 @@ references:
     authors:
       - name: "Biblioteca Nacional"
     notes: "Textos do portal gov.br sob CC BY-ND 3.0"
+  - type: data
+    title: "MAPE: A Dataset of Correspondence from the Portuguese Empire"
+    version: "6"
+    year: 2026
+    authors:
+      - family-names: Błoch
+        given-names: Agata
+      - family-names: Vasques Filho
+        given-names: Demival
+      - family-names: Bojanowski
+        given-names: Michał
+      - family-names: Santana
+        given-names: Clodomir
+      - family-names: Hussain
+        given-names: Saddam
+      - family-names: Rzońca
+        given-names: Apolinary
+      - family-names: Podsiadły
+        given-names: Artur
+    doi: 10.5281/zenodo.24403753
+    license: CC-BY-4.0
+    notes: "Tradução inglesa dos resumos (projeto Mapping the Atlantic Portuguese Empire), exibida no catálogo sem alterações"

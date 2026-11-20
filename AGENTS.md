@@ -57,6 +57,7 @@ python -m uvicorn web.main:app --port 8000      # o catálogo em http://localhos
 
 python build/importar_colecao.py --entrada documentos.parquet --colecao ahu-brasil
 python build/importar_camadas.py --entrada documentos.parquet --colecao ahu-brasil  # tipologia
+python build/importar_mape.py --entrada mape_dataset_version_6.csv  # tradução inglesa (MAPE)
 python build/construir_indice.py --modelo intfloat/multilingual-e5-small
 python build/construir_app.py                   # artefatos de app_dados/
 python build/construir_estatico.py              # índice estático (model2vec) para a versão leve

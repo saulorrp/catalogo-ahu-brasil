@@ -90,6 +90,10 @@ def _serializar_ficha(dados, doc_uid: str) -> dict:
         "tipologia_a_revisar": ficha.tipologia_a_revisar,
         "pasta": ficha.pasta,
         "resumo": ficha.resumo,
+        "resumo_en": ficha.resumo_en,
+        "resumo_en_fonte": ("MAPE dataset v6 (Błoch et al., 2026), doi:10.5281/zenodo.24403753, CC BY 4.0, "
+                            "sem alterações"
+                            if ficha.resumo_en else None),
         "cotas": ficha.cotas,
         "links": {
             "catalogo": f"/ahu/doc/{ficha.doc_uid}",

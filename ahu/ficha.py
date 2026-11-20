@@ -29,10 +29,13 @@ class Ficha:
     cotas: dict[str, str] = field(default_factory=dict)
     links: dict[str, str | None] = field(default_factory=dict)
     colecao: str | None = None
+    # Tradução inglesa do MAPE (camada mape_en_v6), quando o resumo é o mesmo nas duas fontes.
+    resumo_en: str | None = None
 
     def texto_visivel(self) -> str:
         """Tudo que a ficha mostra, num só texto."""
-        partes = [self.titulo, self.resumo, str(self.ano), self.tipologia or "", self.pasta or ""]
+        partes = [self.titulo, self.resumo, self.resumo_en or "", str(self.ano),
+                  self.tipologia or "", self.pasta or ""]
         partes += list(self.cotas.values())
         partes += [str(v) for v in self.links.values() if v]
         return "\n".join(x for x in partes if x)
@@ -121,4 +124,5 @@ def montar(dados, doc_uid: str, termos: list[str] | None = None) -> Ficha:
         cotas=cotas,
         links=links.do_documento(linha),
         colecao=str(_valor(linha, "colecao")) if _valor(linha, "colecao") is not None else None,
+        resumo_en=str(_valor(linha, "resumo_en")) if _valor(linha, "resumo_en") is not None else None,
     )

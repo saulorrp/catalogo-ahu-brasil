@@ -16,6 +16,10 @@ No ar em **<https://agiulfo.tailc278e6.ts.net/ahu/>**.
   campos e busca semântica com `multilingual-e5-small`, fundidas por posição. No servidor, um
   reranker (cross-encoder mMiniLM) relê os 30 primeiros resultados; a lista aparece antes e se
   reordena quando ele termina. Filtros por período, pasta e tipologia.
+- **Resumo em inglês.** A tradução publicada pelo projeto
+  [MAPE](https://doi.org/10.5281/zenodo.24403753) (Mapping the Atlantic Portuguese Empire; Błoch,
+  Vasques Filho, Bojanowski, Santana, Hussain, Rzońca e Podsiadły, 2026, CC BY 4.0), reproduzida
+  sem alterações e mostrada quando o resumo português do MAPE é o mesmo do catálogo.
 - **Links de acesso.** Cada documento leva ao DigitArq (ficha do AHU), ao DocReader da Biblioteca
   Nacional (imagens do Projeto Resgate, para 90% dos documentos) e à página do catálogo do AHU no
   ACTD de onde o resumo foi tirado.
@@ -77,7 +81,7 @@ Para reconstruir os dados a partir da coleção e das camadas, e para os detalhe
 - **Código: MIT** ([`LICENSE`](LICENSE)).
 - Dados: **licença por camada** ([`LICENSE-DATA.md`](LICENSE-DATA.md)): fatos e identificadores
   CC0, camadas próprias CC BY 4.0, resumos do AHU fora da licença aberta (termos do ACTD: pesquisa e
-  educação), textos do gov.br CC BY-ND 3.0.
+  educação), textos do gov.br CC BY-ND 3.0, tradução inglesa do MAPE CC BY 4.0.
 - Fonte embutida no PDF: **Noto Serif** (SIL OFL), em
   [`ahu/fontes/LICENSE-NotoSerif-OFL.txt`](ahu/fontes/LICENSE-NotoSerif-OFL.txt).
 - Resumos e cotas do catálogo: Arquivo Histórico Ultramarino e Projeto Resgate
