@@ -29,7 +29,7 @@ class Ficha:
     cotas: dict[str, str] = field(default_factory=dict)
     links: dict[str, str | None] = field(default_factory=dict)
     colecao: str | None = None
-    # Tradução inglesa do MAPE (camada mape_en_v4), quando o resumo é o mesmo nas duas fontes.
+    # Tradução inglesa do MAPE (camada mape_en_v6), quando o resumo é o mesmo nas duas fontes.
     resumo_en: str | None = None
 
     def texto_visivel(self) -> str:

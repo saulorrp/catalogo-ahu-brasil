@@ -127,7 +127,7 @@ def montar_documentos(base: pd.DataFrame, tipologia: pd.DataFrame) -> pd.DataFra
 
 
 def juntar_traducao(docs: pd.DataFrame, traducao: pd.DataFrame) -> pd.DataFrame:
-    """A tradução inglesa (camada mape_en_v4), só nos pares ligados: mesmo resumo nas duas fontes."""
+    """A tradução inglesa (camada mape_en_v6), só nos pares ligados: mesmo resumo nas duas fontes."""
     ligados = traducao.loc[traducao["ligado"], ["doc_uid", "resumo_en", "mape_doc_id"]]
     docs = docs.merge(ligados, on="doc_uid", how="left")
     docs["mape_doc_id"] = docs["mape_doc_id"].astype("Int64")

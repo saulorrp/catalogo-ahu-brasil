@@ -1,26 +1,30 @@
-"""importar_mape.py — camada `mape_en_v4`: a tradução inglesa dos resumos feita pelo projeto MAPE.
+"""importar_mape.py — camada `mape_en_v6`: a tradução inglesa dos resumos feita pelo projeto MAPE.
 
-Fonte: *Mapping the Atlantic Portuguese Empire* (MAPE), de Agata Błoch, Demival Vasques Filho,
-Michał Bojanowski, Clodomir Santana e Saddam Hussain. Dataset no Zenodo, versão 4 (15/09/2025),
-doi:10.5281/zenodo.15481608, licença CC BY 4.0. O arquivo usado é o CSV bilíngue
-`MAPE_dataset_2025_Bilingual_v2.csv` (a primeira linha diz "MetaData" e é pulada).
+Fonte: *MAPE: A Dataset of Correspondence from the Portuguese Empire* (Mapping the Atlantic
+Portuguese Empire), de Agata Błoch, Demival Vasques Filho, Michał Bojanowski, Clodomir Santana,
+Saddam Hussain, Apolinary Rzońca e Artur Podsiadły. Zenodo, versão 6 (20/11/2026),
+doi:10.5281/zenodo.24403753 (DOI de conceito 10.5281/zenodo.15336798), licença CC BY 4.0.
+Arquivo: `mape_dataset_version_6.csv`. O script também lê o CSV bilíngue da versão 2, cuja
+primeira linha diz "MetaData"; texto e tradução são idênticos nas duas versões.
 
-O MAPE transcreveu os mesmos catálogos do AHU publicados no ACTD. Cada verbete do MAPE se liga a
-um documento do catálogo pelo código de referência (`PT/AHU/CU/…`), normalizado pelo
-`ahu/conversor.py` dos dois lados (o MAPE escreve `…/0101/7581`, o catálogo `…/0101/07581`).
+A tradução é a do MAPE, **sem nenhuma alteração**: foi feita por eles com o Gemini 1.5 Flash, e
+os erros dela, inclusive 13 registros em que ficou gravada a mensagem de erro da API, ficam como
+estão. Uma versão nova do MAPE entra rodando este script com o CSV novo.
 
-A tradução só é ligada quando o resumo português do MAPE é o mesmo do catálogo: semelhança de
-pelo menos `LIMIAR_SEMELHANCA` entre os dois textos normalizados. Abaixo disso o par fica na
-camada, com a semelhança, mas a tradução não vai para o app: um código igual com texto diferente
-indica cota repetida ou erro de uma das fontes, e é assunto da auditoria cruzada, não da ficha.
+Cada verbete do MAPE se liga a um documento do catálogo pelo código de referência (`PT/AHU/CU/…`),
+normalizado pelo `ahu/conversor.py` dos dois lados (o MAPE escreve `…/0101/7581`, o catálogo
+`…/0101/07581`). A tradução só é ligada quando o resumo português do MAPE é o mesmo do catálogo
+(semelhança de pelo menos `LIMIAR_SEMELHANCA`): um código igual com texto diferente indica que o
+verbete não é o mesmo, e a tradução seria a de outro documento. Esses pares ficam na camada, com
+a semelhança, para a auditoria cruzada.
 
-Entrada : o CSV do MAPE (não vai para o repositório: 142 MB; o sha256 fica no camada.json)
-Saídas  : corpus/camadas/mape_en_v4/mape.parquet  (doc_uid, mape_doc_id, mape_reference_code,
-                                                    mape_ano, semelhanca, ligado, resumo_en)
-          corpus/camadas/mape_en_v4/camada.json    (fonte, crédito, licença, regra, contagens)
+Entrada : o CSV do MAPE (não vai para o repositório: 180 MB; o sha256 fica no camada.json)
+Saídas  : corpus/camadas/mape_en_v6/mape.parquet  (doc_uid, mape_doc_id, mape_reference_code,
+                                                    semelhanca, ligado, resumo_en)
+          corpus/camadas/mape_en_v6/camada.json    (fonte, crédito, licença, regra, contagens)
           corpus/manifest.json
 
-Uso: python build/importar_mape.py --entrada MAPE_dataset_2025_Bilingual_v2.csv
+Uso: python build/importar_mape.py --entrada mape_dataset_version_6.csv
 """
 from __future__ import annotations
 
@@ -42,25 +46,29 @@ from build.importar_base import ErroImportacao, commit_atual, sha256_arquivo  # 
 from build.importar_camadas import gravar_camada, registrar_no_manifesto  # noqa: E402
 
 VERSAO_SCRIPT = "1.0.0"
-CAMADA_MAPE = "mape_en_v4"
+CAMADA_MAPE = "mape_en_v6"
 LIMIAR_SEMELHANCA = 0.9
-COLUNA_EN = "English Translation  (Doc_Text_Port)"  # com dois espaços, como no CSV
-# O MAPE traduziu com o Gemini 1.5 Flash, e 13 chamadas que falharam ficaram gravadas como
-# "tradução" (a mensagem de erro da API). Elas nunca vão para o app.
-FALHA_DE_TRADUCAO = "Exception occurred"
+COLUNA_PT, COLUNA_EN = "doc_text_portuguese", "doc_text_english"
+# Nomes das colunas no CSV da versão 2 (com dois espaços antes do parêntese, como lá).
+COLUNAS_V2 = {"Doc_Text_Port": COLUNA_PT, "English Translation  (Doc_Text_Port)": COLUNA_EN}
 
+AUTORES = ["Agata Błoch", "Demival Vasques Filho", "Michał Bojanowski", "Clodomir Santana",
+           "Saddam Hussain", "Apolinary Rzońca", "Artur Podsiadły"]
 FONTE = {
-    "titulo": "Mapping the Atlantic Portuguese Empire (MAPE) dataset",
-    "autores": ["Agata Błoch", "Demival Vasques Filho", "Michał Bojanowski", "Clodomir Santana",
-                "Saddam Hussain"],
-    "versao": "4",
-    "publicado_em": "2025-09-15",
-    "doi": "10.5281/zenodo.15481608",
-    "url": "https://doi.org/10.5281/zenodo.15481608",
+    "titulo": "MAPE: A Dataset of Correspondence from the Portuguese Empire",
+    "projeto": "Mapping the Atlantic Portuguese Empire (MAPE)",
+    "autores": AUTORES,
+    "versao": "6",
+    "publicado_em": "2026-11-20",
+    "doi": "10.5281/zenodo.24403753",
+    "doi_conceito": "10.5281/zenodo.15336798",
+    "url": "https://doi.org/10.5281/zenodo.24403753",
     "licenca": "CC BY 4.0",
+    "traducao": "feita pelo MAPE com o Google Gemini 1.5 Flash (descrição do dataset); "
+                "reproduzida sem alterações",
     "credito": "Tradução inglesa: Błoch, A.; Vasques Filho, D.; Bojanowski, M.; Santana, C.; "
-               "Hussain, S. Mapping the Atlantic Portuguese Empire (MAPE) dataset, v4, 2025. "
-               "Zenodo, doi:10.5281/zenodo.15481608. CC BY 4.0.",
+               "Hussain, S.; Rzońca, A.; Podsiadły, A. MAPE: A Dataset of Correspondence from the "
+               "Portuguese Empire, v6, 2026. Zenodo, doi:10.5281/zenodo.24403753. CC BY 4.0.",
 }
 
 
@@ -95,15 +103,14 @@ def semelhanca(a, b) -> float:
     return difflib.SequenceMatcher(None, a, b, autojunk=False).ratio()
 
 
-def traducao_valida(en) -> bool:
-    return isinstance(en, str) and bool(en.strip()) and FALHA_DE_TRADUCAO not in en
-
-
 def ler_mape(entrada: Path) -> pd.DataFrame:
     if not entrada.exists():
         raise ErroImportacao(f"CSV do MAPE não encontrado: {entrada}")
-    m = pd.read_csv(entrada, skiprows=1, low_memory=False, dtype={"doc_number": str})
-    faltam = {"doc_id", "reference_code", "year", "Doc_Text_Port", COLUNA_EN} - set(m.columns)
+    with open(entrada, encoding="utf-8") as f:
+        pular = 1 if f.readline().startswith("MetaData") else 0  # o CSV da versão 2
+    m = pd.read_csv(entrada, skiprows=pular, low_memory=False, dtype={"doc_number": str})
+    m = m.rename(columns=COLUNAS_V2)
+    faltam = {"doc_id", "reference_code", COLUNA_PT, COLUNA_EN} - set(m.columns)
     if faltam:
         raise ErroImportacao(f"O CSV do MAPE não tem as colunas {sorted(faltam)}.")
     m["chave"] = m["reference_code"].map(chave_referencia)
@@ -127,22 +134,18 @@ def parear(base: pd.DataFrame, mape: pd.DataFrame) -> pd.DataFrame:
         if chave is None or chave not in m.index:
             continue
         r = m.loc[chave]
-        s = semelhanca(resumo, r["Doc_Text_Port"])
-        ano = pd.to_numeric(r["year"], errors="coerce")
+        s = semelhanca(resumo, r[COLUNA_PT])
         en = r[COLUNA_EN]
         linhas.append({
             "doc_uid": uid,
             "mape_doc_id": int(r["doc_id"]),
             "mape_reference_code": str(r["reference_code"]),
-            "mape_ano": None if pd.isna(ano) else int(ano),
             "semelhanca": round(float(s), 4),
-            "ligado": bool(s >= LIMIAR_SEMELHANCA and traducao_valida(en)),
-            "resumo_en": en.strip() if isinstance(en, str) else None,
+            "ligado": bool(s >= LIMIAR_SEMELHANCA and isinstance(en, str) and en.strip()),
+            "resumo_en": en if isinstance(en, str) else None,  # como o MAPE publicou
         })
-    df = pd.DataFrame(linhas, columns=["doc_uid", "mape_doc_id", "mape_reference_code", "mape_ano",
-                                       "semelhanca", "ligado", "resumo_en"])
-    df["mape_ano"] = df["mape_ano"].astype("Int64")
-    return df
+    return pd.DataFrame(linhas, columns=["doc_uid", "mape_doc_id", "mape_reference_code",
+                                         "semelhanca", "ligado", "resumo_en"])
 
 
 def importar_mape(entrada: Path, corpus: Path) -> dict:
@@ -156,15 +159,13 @@ def importar_mape(entrada: Path, corpus: Path) -> dict:
     camada = gravar_camada(pasta, "mape.parquet", df, {
         "nome": CAMADA_MAPE,
         "tipo": "traducao_en",
-        "versao": "4",
+        "versao": "6",
         "fonte": FONTE,
         "regra_pareamento": "código de referência normalizado por ahu/conversor.py dos dois lados "
                             "(no catálogo, reference_code ou, sem ele, new_code)",
-        "traducao": "automática, pelo Google Gemini 1.5 Flash (descrição do dataset no Zenodo); "
-                     "sem revisão humana declarada",
-        "regra_ligacao": "tradução válida (não vazia, sem mensagem de erro da API) e semelhança "
-                         f"(difflib, textos sem acento e sem pontuação) >= "
-                         f"{LIMIAR_SEMELHANCA} entre o resumo do catálogo e o Doc_Text_Port do MAPE",
+        "regra_ligacao": "tradução não vazia e semelhança (difflib, textos sem acento e sem "
+                         f"pontuação) >= {LIMIAR_SEMELHANCA} entre o resumo do catálogo e o "
+                         "texto português do MAPE",
         "contagens": {
             "mape_verbetes": int(len(mape)),
             "mape_sem_codigo_reconhecido": int(mape["chave"].isna().sum()),

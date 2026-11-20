@@ -33,16 +33,16 @@
       },
       "ativa": true
     },
-    "mape_en_v4": {
+    "mape_en_v6": {
       "tipo": "traducao_en",
-      "versao": "4",
+      "versao": "6",
       "documentos": 144368,
       "arquivos": {
-        "camadas/mape_en_v4/mape.parquet": "61d95b33880ce93251719eda723578bf1d421b559fbf284663751dc81a28acfc",
-        "camadas/mape_en_v4/camada.json": "b9d55187e8fd76db085ecb2f62efa42f5ce65433d8c671bccb168d0dc69a6f34"
+        "camadas/mape_en_v6/mape.parquet": "40b2c3bc8126dd988a939b3f85d3bef0ae5be5871e43c7f69d1372941895a6d9",
+        "camadas/mape_en_v6/camada.json": "a9bb6f6db865bd499cb11634982cbddddea88fc28ae10a2fc830fd0414b71fc0"
       },
       "ativa": true
     }
   },
-  "gerado_em": "2026-11-20T21:32:01+00:00"
+  "gerado_em": "2026-11-20T22:04:53+00:00"
 }

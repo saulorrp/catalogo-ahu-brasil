@@ -48,7 +48,11 @@
 {% endif %}
 
 <h3>1. Fontes</h3>
-<p>O que são o AHU, o Projeto Resgate, a Biblioteca Nacional e o ACTD, de onde vêm os resumos e as cotas, e os links para os catálogos e os microfilmes estão na aba <a href="{{ url_for('referencias') }}">Referências</a>. O passo a passo da coleta do catálogo está em <a href="https://github.com/saulorrp/catalogo-ahu-brasil/blob/main/docs/METODO_COLETA.md" target="_blank">METODO_COLETA.md</a>.</p>
+<p>O que são o AHU, o Projeto Resgate, a Biblioteca Nacional, o ACTD e o MAPE, de onde vêm os resumos, as cotas e a tradução inglesa, e os links para os catálogos e os microfilmes estão na aba <a href="{{ url_for('referencias') }}">Referências</a>. O passo a passo da coleta do catálogo está em <a href="https://github.com/saulorrp/catalogo-ahu-brasil/blob/main/docs/METODO_COLETA.md" target="_blank">METODO_COLETA.md</a>.</p>
+<ul>
+    <li><strong>Resumos e cotas:</strong> catálogos do Arquivo Histórico Ultramarino publicados no <a href="https://actd.iict.pt/" target="_blank" rel="noopener">ACTD</a>, conferidos com o <a href="https://www.gov.br/bn/pt-br/central-de-conteudos/projeto-resgate" target="_blank" rel="noopener">Projeto Resgate</a>.</li>
+    <li><strong>Tradução inglesa:</strong> <em>MAPE: A Dataset of Correspondence from the Portuguese Empire</em>, do projeto Mapping the Atlantic Portuguese Empire (MAPE), versão 6, 2026, <a href="https://doi.org/10.5281/zenodo.24403753" target="_blank" rel="noopener">doi:10.5281/zenodo.24403753</a>, CC BY 4.0.</li>
+</ul>
 
 <h3 id="busca">2. Como a busca funciona</h3>
 <p>A busca combina três motores e funde os resultados pela <strong>posição</strong> de cada documento em cada motor, não por uma nota inventada.</p>
@@ -62,11 +66,11 @@
 
 <h3 id="dados">3. O que o catálogo tem, e o que não tem</h3>
 <p>Cada documento traz o resumo do catálogo do AHU como foi publicado, as três formas de cota, a data, a pasta (capitania ou região) e a <strong>tipologia</strong> (carta, ofício, requerimento…), que é a primeira palavra do verbete, normalizada e marcada quando é rara no catálogo. Os erros da fonte não são corrigidos: ganham um <span class="sic">[sic]</span> na exibição.</p>
-{% if com_en %}<p>Para {{ com_en | milhar }} documentos há também um <strong>resumo em inglês</strong>, a tradução publicada pelo projeto <em>Mapping the Atlantic Portuguese Empire</em> (MAPE). Ela só aparece quando o resumo português do MAPE é o mesmo do catálogo. É tradução automática, feita pelo MAPE com o Gemini 1.5 Flash, sem revisão: na dúvida, vale o resumo em português.</p>{% endif %}
+{% if com_en %}<p>Para {{ com_en | milhar }} documentos há também um <strong>resumo em inglês</strong>, a tradução publicada pelo projeto <em>Mapping the Atlantic Portuguese Empire</em> (MAPE; Błoch, Vasques Filho, Bojanowski, Santana, Hussain, Rzońca e Podsiadły, 2026). A tradução é do MAPE, feita por eles com o Gemini 1.5 Flash, e aparece aqui exatamente como publicada. Ela só é mostrada quando o resumo português do MAPE é o mesmo do catálogo, para não pôr num documento a tradução de outro.</p>{% endif %}
 <p>O catálogo não tem dados gerados por modelos de linguagem além dessa tradução, que é do MAPE e vem creditada em cada documento. Os modelos entram só na busca por sentido e na reordenação do topo, que não mudam nenhum dado.</p>
 
 <h3 id="licenca">Licença e crédito</h3>
-<p>Cada camada tem a sua licença (<a href="https://github.com/saulorrp/catalogo-ahu-brasil/blob/main/LICENSE-DATA.md" target="_blank" rel="noopener">LICENSE-DATA.md</a>). Código: MIT. Cotas, datas e outros fatos: CC0. Camadas próprias (tipologia normalizada, ligações aos acervos): CC BY 4.0. A tradução inglesa é do MAPE (Błoch, Vasques Filho, Bojanowski, Santana e Hussain, 2025, <a href="https://doi.org/10.5281/zenodo.15481608" target="_blank" rel="noopener">doi:10.5281/zenodo.15481608</a>), sob CC BY 4.0. Os <strong>resumos</strong> são do catálogo do AHU publicado no ACTD e ficam fora da licença aberta: uso livre só para fins pessoais, educativos e de investigação, com crédito. Os textos do Projeto Resgate seguem a licença do portal gov.br (CC BY-ND 3.0).</p>
+<p>Cada camada tem a sua licença (<a href="https://github.com/saulorrp/catalogo-ahu-brasil/blob/main/LICENSE-DATA.md" target="_blank" rel="noopener">LICENSE-DATA.md</a>). Código: MIT. Cotas, datas e outros fatos: CC0. Camadas próprias (tipologia normalizada, ligações aos acervos): CC BY 4.0. A tradução inglesa é do MAPE (Błoch, Vasques Filho, Bojanowski, Santana, Hussain, Rzońca e Podsiadły, 2026, <a href="https://doi.org/10.5281/zenodo.24403753" target="_blank" rel="noopener">doi:10.5281/zenodo.24403753</a>), sob CC BY 4.0. Os <strong>resumos</strong> são do catálogo do AHU publicado no ACTD e ficam fora da licença aberta: uso livre só para fins pessoais, educativos e de investigação, com crédito. Os textos do Projeto Resgate seguem a licença do portal gov.br (CC BY-ND 3.0).</p>
 <p>Dados derivados: Rocha, S. R. P. <em>Catálogo AHU-Brasil</em> (2026), doi:10.5281/zenodo.18772666, CC BY 4.0. Catálogo de origem: Arquivo Histórico Ultramarino (Lisboa), catálogos publicados no Arquivo Científico Tropical Digital (ACTD/IICT), e Projeto Resgate "Barão do Rio Branco" (Biblioteca Nacional / Ministério da Cultura).</p>
 </div>
 {% endblock %}

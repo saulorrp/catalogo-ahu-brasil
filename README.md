@@ -16,10 +16,10 @@ No ar em **<https://agiulfo.tailc278e6.ts.net/ahu/>**.
   campos e busca semântica com `multilingual-e5-small`, fundidas por posição. No servidor, um
   reranker (cross-encoder mMiniLM) relê os 30 primeiros resultados; a lista aparece antes e se
   reordena quando ele termina. Filtros por período, pasta e tipologia.
-- **Resumo em inglês.** Para 141.782 documentos, a tradução publicada pelo projeto
-  [MAPE](https://doi.org/10.5281/zenodo.15481608) (Błoch, Vasques Filho, Bojanowski, Santana e
-  Hussain, 2025, CC BY 4.0), ligada só quando o resumo português do MAPE é o mesmo do catálogo.
-  É tradução automática (Gemini 1.5 Flash, feita pelo MAPE), sem revisão: vale o resumo em português.
+- **Resumo em inglês.** A tradução publicada pelo projeto
+  [MAPE](https://doi.org/10.5281/zenodo.24403753) (Mapping the Atlantic Portuguese Empire; Błoch,
+  Vasques Filho, Bojanowski, Santana, Hussain, Rzońca e Podsiadły, 2026, CC BY 4.0), reproduzida
+  sem alterações e mostrada quando o resumo português do MAPE é o mesmo do catálogo.
 - **Links de acesso.** Cada documento leva ao DigitArq (ficha do AHU), ao DocReader da Biblioteca
   Nacional (imagens do Projeto Resgate, para 90% dos documentos) e à página do catálogo do AHU no
   ACTD de onde o resumo foi tirado.

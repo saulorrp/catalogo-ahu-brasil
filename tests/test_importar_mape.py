@@ -1,4 +1,4 @@
-"""Testes da camada mape_en_v4 (tradução inglesa do MAPE)."""
+"""Testes da camada mape_en_v6 (tradução inglesa do MAPE)."""
 import json
 
 import pandas as pd
@@ -7,20 +7,19 @@ import pytest
 from build import construir_app as ca
 from build import importar_mape as im
 
-COLUNAS = ["doc_id", "doc_source", "doc_box", "doc_number", "doc_type", "year", "month", "day",
-           "reference_code", "doc_link", "Doc_Text_Port", im.COLUNA_EN]
+COLUNAS = ["doc_id", "reference_code", "doc_source", "doc_box", "doc_number", "year", "month",
+           "day", "doc_type", "doc_link", im.COLUNA_PT, im.COLUNA_EN]
 
 
 def escrever_mape(pasta, linhas):
     arq = pasta / "mape.csv"
     with open(arq, "w", encoding="utf-8") as f:
-        f.write("MetaData ,,,,,,,,,,,\n")
         pd.DataFrame(linhas, columns=COLUNAS).to_csv(f, index=False)
     return arq
 
 
-def linha(doc_id, ref, pt, en, ano=1750):
-    return [doc_id, "X", "Cx.1", "1", "CARTA", ano, None, None, ref, "", pt, en]
+def linha(doc_id, ref, pt, en, ano="1750-01"):
+    return [doc_id, ref, "x", "Cx.1", "1", ano, None, None, "CARTA", "", pt, en]
 
 
 def test_chave_normaliza_o_codigo_do_mape():
@@ -48,14 +47,25 @@ def test_so_liga_a_traducao_quando_o_resumo_e_o_mesmo(tmp_path):
         linha(2, "PT/AHU/CU/019/0001/00002", "AVISO sobre outra coisa inteiramente.", "Notice."),
         linha(3, "PT/AHU/CU/019/0001/00003", "REQUERIMENTO de Fulano.", "Petition of Fulano."),
     ]))
-    falha = im.ler_mape(escrever_mape(tmp_path, [linha(
-        1, "PT/AHU/CU/019/0001/00001", "CARTA do governador ao rei.",
-        "Exception occurred: HTTPSConnectionPool(host='x', port=443): Read timed out.")]))
-    assert not im.parear(base, falha).set_index("doc_uid").loc["t:1", "ligado"]
     pares = im.parear(base, mape).set_index("doc_uid")
     assert pares.loc["t:1", "ligado"] and pares.loc["t:1", "resumo_en"] == "Letter from the governor."
     assert not pares.loc["t:2", "ligado"]            # mesmo código, outro texto: só para a auditoria
     assert pares.loc["t:3", "mape_doc_id"] == 3      # pareado pela cota do Resgate
+    # A tradução vai como o MAPE publicou, com os erros dela: nada é filtrado nem reescrito.
+    erro = "Exception occurred: HTTPSConnectionPool(host='x', port=443): Read timed out. "
+    falha = im.ler_mape(escrever_mape(tmp_path, [linha(
+        1, "PT/AHU/CU/019/0001/00001", "CARTA do governador ao rei.", erro)]))
+    par = im.parear(base, falha).set_index("doc_uid").loc["t:1"]
+    assert par["ligado"] and par["resumo_en"] == erro
+
+
+def test_le_tambem_o_csv_da_versao_2(tmp_path):
+    arq = tmp_path / "v2.csv"
+    arq.write_text("MetaData ,,,\ndoc_id,reference_code,Doc_Text_Port,"
+                   "English Translation  (Doc_Text_Port)\n1,PT/AHU/CU/019/0001/1,CARTA.,Letter.\n",
+                   encoding="utf-8")
+    m = im.ler_mape(arq)
+    assert m.loc[0, im.COLUNA_EN] == "Letter." and m.loc[0, "chave"] == "PT/AHU/CU/019/0001/00001"
 
 
 def test_app_so_recebe_os_pares_ligados():
@@ -77,8 +87,8 @@ def test_camada_registra_fonte_credito_e_licenca():
     from tests.conftest import RAIZ
     arq = RAIZ / "corpus" / "camadas" / im.CAMADA_MAPE / "camada.json"
     if not arq.exists():
-        pytest.skip("camada mape_en_v4 não construída")
+        pytest.skip("camada mape_en_v6 não construída")
     camada = json.loads(arq.read_text("utf-8"))
-    assert camada["fonte"]["doi"] == "10.5281/zenodo.15481608"
+    assert camada["fonte"]["doi"] == "10.5281/zenodo.24403753"
     assert camada["fonte"]["licenca"] == "CC BY 4.0"
-    assert len(camada["fonte"]["autores"]) == 5
+    assert len(camada["fonte"]["autores"]) == 7

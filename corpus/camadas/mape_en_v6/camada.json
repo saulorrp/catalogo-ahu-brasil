@@ -1,0 +1,61 @@
+{
+  "nome": "mape_en_v6",
+  "tipo": "traducao_en",
+  "versao": "6",
+  "fonte": {
+    "titulo": "MAPE: A Dataset of Correspondence from the Portuguese Empire",
+    "projeto": "Mapping the Atlantic Portuguese Empire (MAPE)",
+    "autores": [
+      "Agata Błoch",
+      "Demival Vasques Filho",
+      "Michał Bojanowski",
+      "Clodomir Santana",
+      "Saddam Hussain",
+      "Apolinary Rzońca",
+      "Artur Podsiadły"
+    ],
+    "versao": "6",
+    "publicado_em": "2026-11-20",
+    "doi": "10.5281/zenodo.24403753",
+    "doi_conceito": "10.5281/zenodo.15336798",
+    "url": "https://doi.org/10.5281/zenodo.24403753",
+    "licenca": "CC BY 4.0",
+    "traducao": "feita pelo MAPE com o Google Gemini 1.5 Flash (descrição do dataset); reproduzida sem alterações",
+    "credito": "Tradução inglesa: Błoch, A.; Vasques Filho, D.; Bojanowski, M.; Santana, C.; Hussain, S.; Rzońca, A.; Podsiadły, A. MAPE: A Dataset of Correspondence from the Portuguese Empire, v6, 2026. Zenodo, doi:10.5281/zenodo.24403753. CC BY 4.0."
+  },
+  "regra_pareamento": "código de referência normalizado por ahu/conversor.py dos dois lados (no catálogo, reference_code ou, sem ele, new_code)",
+  "regra_ligacao": "tradução não vazia e semelhança (difflib, textos sem acento e sem pontuação) >= 0.9 entre o resumo do catálogo e o texto português do MAPE",
+  "contagens": {
+    "mape_verbetes": 182490,
+    "mape_sem_codigo_reconhecido": 0,
+    "catalogo_documentos": 167324,
+    "pareados": 144368,
+    "ligados": 141796,
+    "por_faixa_de_semelhanca": {
+      "1": 126196,
+      "0,9–1": 15578,
+      "0,8–0,9": 1625,
+      "0,5–0,8": 707,
+      "<0,5": 262
+    }
+  },
+  "processo": {
+    "script": "build/importar_mape.py",
+    "versao_script": "1.0.0",
+    "commit": "e7b079f"
+  },
+  "entrada": {
+    "arquivo": "mape_dataset_version_6.csv",
+    "sha256": "571d8c5a5f0d47c325bc9ed6a1f7c75ab3642ede764ab6992f0fe51442324beb"
+  },
+  "documentos": 144368,
+  "esquema": {
+    "doc_uid": "object",
+    "mape_doc_id": "int64",
+    "mape_reference_code": "object",
+    "semelhanca": "float64",
+    "ligado": "bool",
+    "resumo_en": "object"
+  },
+  "data": "2026-11-20T22:04:53+00:00"
+}

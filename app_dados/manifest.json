@@ -1,21 +1,21 @@
 {
   "versao_artefatos": "1",
-  "gerado_em": "2026-11-20T21:35:54+00:00",
+  "gerado_em": "2026-11-20T22:08:41+00:00",
   "processo": {
     "script": "build/construir_app.py",
     "versao_script": "1.0.0",
-    "commit": "5ec0f62"
+    "commit": "e7b079f"
   },
   "corpus": {
     "versao_corpus": "0.1.0",
-    "gerado_em": "2026-11-20T21:32:01+00:00",
+    "gerado_em": "2026-11-20T22:04:53+00:00",
     "colecoes": [
       "ahu-brasil"
     ],
     "camadas": {
       "tipologia": "tipologia_v1",
       "embeddings": "embeddings_e5small_v1",
-      "traducao_en": "mape_en_v4"
+      "traducao_en": "mape_en_v6"
     },
     "manifesto": {
       "versao_corpus": "0.1.0",
@@ -52,18 +52,18 @@
           },
           "ativa": true
         },
-        "mape_en_v4": {
+        "mape_en_v6": {
           "tipo": "traducao_en",
-          "versao": "4",
+          "versao": "6",
           "documentos": 144368,
           "arquivos": {
-            "camadas/mape_en_v4/mape.parquet": "61d95b33880ce93251719eda723578bf1d421b559fbf284663751dc81a28acfc",
-            "camadas/mape_en_v4/camada.json": "b9d55187e8fd76db085ecb2f62efa42f5ce65433d8c671bccb168d0dc69a6f34"
+            "camadas/mape_en_v6/mape.parquet": "40b2c3bc8126dd988a939b3f85d3bef0ae5be5871e43c7f69d1372941895a6d9",
+            "camadas/mape_en_v6/camada.json": "a9bb6f6db865bd499cb11634982cbddddea88fc28ae10a2fc830fd0414b71fc0"
           },
           "ativa": true
         }
       },
-      "gerado_em": "2026-11-20T21:32:01+00:00"
+      "gerado_em": "2026-11-20T22:04:53+00:00"
     }
   },
   "modelo_embeddings": {
@@ -151,7 +151,7 @@
   },
   "doc_uids_sha256": "8bb19d5264cd0d399220e00f738d4bcf5c241c39aaa49da33b8c6fb346616398",
   "artefatos": {
-    "documentos.parquet": "9065c5915a191d68c26c7186d76f14e2bb2723bf4e48e467026707663bed1790",
+    "documentos.parquet": "41e90558c9dcf6a94fb6d165a15a8f32e2518b3f4fa789bbf616c60a31ae3d6d",
     "apelidos.json": "8143001957991583c921c34de2db0a9b5725e4738a475cfd5796a0c7b52b246b",
     "embeddings/parte_000.f16.npy": "0000bbd0146a777fad029a854c0dcc70f63d9112c0ef270e316bcb3df8837089",
     "embeddings/parte_001.f16.npy": "adfe21b7af052f0e65585854184aeb468435884b06ab48f9249fd332d345c910",
