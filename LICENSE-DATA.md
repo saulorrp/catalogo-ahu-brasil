@@ -10,6 +10,7 @@ e só vale a licença da linha em que o arquivo está. Em caso de dúvida, a mai
 | **Camadas próprias** | `corpus/camadas/*` (tipologia), `avaliacao/`, `coleta/qc/`, documentação em `docs/` | CC BY 4.0, com o crédito abaixo |
 | **Resumos do catálogo do AHU** (via ACTD/IICT) | coluna `description`/resumo de `corpus/colecoes/*/documentos.parquet` e de `app_dados/documentos.parquet` | **Fora da licença aberta.** Termos do ACTD: uso livre só para fins pessoais, educativos e de investigação, com crédito; uso comercial exige autorização |
 | **Textos do Projeto Resgate** (gov.br / Biblioteca Nacional) | `description_resgate` e textos copiados do portal | CC BY-ND 3.0 (licença do portal gov.br): cópia literal com crédito, sem alterar o texto |
+| **Tradução inglesa do MAPE** | coluna `resumo_en` de `app_dados/documentos.parquet` e `corpus/camadas/mape_en_v4/` | CC BY 4.0, dos autores do MAPE: Błoch, A.; Vasques Filho, D.; Bojanowski, M.; Santana, C.; Hussain, S. *Mapping the Atlantic Portuguese Empire (MAPE) dataset*, v4, 2025, doi:10.5281/zenodo.15481608. A tradução é de resumos do AHU, cujos termos (ACTD) também valem |
 | **Derivados diretos dos resumos** | `app_dados/lexico/`, `app_dados/embeddings/`, `app_dados/estatico/`, vetores em `corpus/camadas/embeddings_*` | Seguem os termos dos resumos de que derivam (uso de pesquisa e educação) até haver autorização do AHU |
 
 Os resumos nunca são reescritos: erros da fonte ficam como estão e ganham a marca `[sic]` só na
@@ -28,6 +29,8 @@ termos da fonte. O pacote completo, se for depositado, fica em acesso restrito p
 > Catálogo de origem: Arquivo Histórico Ultramarino (Lisboa), catálogos publicados no Arquivo
 > Científico Tropical Digital (ACTD/IICT), e Projeto Resgate "Barão do Rio Branco"
 > (Biblioteca Nacional / Ministério da Cultura).
+> Tradução inglesa: projeto MAPE (Błoch, Vasques Filho, Bojanowski, Santana e Hussain, 2025),
+> doi:10.5281/zenodo.15481608, CC BY 4.0.
 
 Quem hospedar o catálogo deve manter este crédito no rodapé do site.
 

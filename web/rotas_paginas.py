@@ -167,7 +167,9 @@ for _caminho in SECOES_RETIRADAS:
 def sobre(request: Request):
     dados = main_module.dados_app
     linha = cache.por_dados(dados, "linha_do_tempo", lambda: linha_do_tempo(dados))
-    return templates.TemplateResponse(request, "sobre.html", {"linha": linha})
+    docs = dados.documentos
+    com_en = int(docs["resumo_en"].notna().sum()) if "resumo_en" in docs.columns else 0
+    return templates.TemplateResponse(request, "sobre.html", {"linha": linha, "com_en": com_en})
 
 
 @router.get("/referencias", name="referencias")

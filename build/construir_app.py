@@ -126,6 +126,14 @@ def montar_documentos(base: pd.DataFrame, tipologia: pd.DataFrame) -> pd.DataFra
     return docs.merge(tipologia[["doc_uid", *COLUNAS_TIPOLOGIA]], on="doc_uid", how="left")
 
 
+def juntar_traducao(docs: pd.DataFrame, traducao: pd.DataFrame) -> pd.DataFrame:
+    """A tradução inglesa (camada mape_en_v4), só nos pares ligados: mesmo resumo nas duas fontes."""
+    ligados = traducao.loc[traducao["ligado"], ["doc_uid", "resumo_en", "mape_doc_id"]]
+    docs = docs.merge(ligados, on="doc_uid", how="left")
+    docs["mape_doc_id"] = docs["mape_doc_id"].astype("Int64")
+    return docs
+
+
 # ---------------------------------------------------------------------------
 # lexico.pkl — BM25 por campos
 # ---------------------------------------------------------------------------
@@ -210,6 +218,7 @@ def construir(corpus: Path, saida: Path) -> dict:
     usadas = {
         "tipologia": camada_ativa(manifesto, "tipologia"),
         "embeddings": camada_ativa(manifesto, "embeddings"),
+        "traducao_en": camada_ativa(manifesto, "traducao_en", obrigatoria=False),
     }
     pasta = corpus / "camadas"
 
@@ -225,6 +234,9 @@ def construir(corpus: Path, saida: Path) -> dict:
     acertos["duplicatas_ignoradas_na_busca"] = int(base["duplicata_de"].notna().sum())
     tipologia = _ler_parquet(pasta / usadas["tipologia"] / "tipologia.parquet", "camada de tipologia")
     docs = montar_documentos(base, tipologia)
+    if usadas["traducao_en"]:
+        traducao = _ler_parquet(pasta / usadas["traducao_en"] / "mape.parquet", "camada de tradução")
+        docs = juntar_traducao(docs, traducao)
     embeddings, camada_emb = alinhar_embeddings(pasta / usadas["embeddings"], docs)
     saida.mkdir(parents=True, exist_ok=True)
     lexico = construir_lexico(docs, saida)

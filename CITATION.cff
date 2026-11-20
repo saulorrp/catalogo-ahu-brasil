@@ -32,3 +32,21 @@ references:
     authors:
       - name: "Biblioteca Nacional"
     notes: "Textos do portal gov.br sob CC BY-ND 3.0"
+  - type: data
+    title: "Mapping the Atlantic Portuguese Empire (MAPE) dataset"
+    version: "4"
+    year: 2025
+    authors:
+      - family-names: Błoch
+        given-names: Agata
+      - family-names: Vasques Filho
+        given-names: Demival
+      - family-names: Bojanowski
+        given-names: Michał
+      - family-names: Santana
+        given-names: Clodomir
+      - family-names: Hussain
+        given-names: Saddam
+    doi: 10.5281/zenodo.15481608
+    license: CC-BY-4.0
+    notes: "Tradução inglesa dos resumos, exibida no catálogo"
