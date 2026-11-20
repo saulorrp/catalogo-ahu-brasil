@@ -38,11 +38,11 @@
       "versao": "4",
       "documentos": 144368,
       "arquivos": {
-        "camadas/mape_en_v4/mape.parquet": "75f253eb47b0bb85b59337131bb6995eb9030e96095a9152b534172a68d16b01",
-        "camadas/mape_en_v4/camada.json": "99aa6f680c51d09701192a11a896e5f7e709d73dc8b3a4e6131fb3149f09178a"
+        "camadas/mape_en_v4/mape.parquet": "61d95b33880ce93251719eda723578bf1d421b559fbf284663751dc81a28acfc",
+        "camadas/mape_en_v4/camada.json": "b9d55187e8fd76db085ecb2f62efa42f5ce65433d8c671bccb168d0dc69a6f34"
       },
       "ativa": true
     }
   },
-  "gerado_em": "2026-11-20T19:29:34+00:00"
+  "gerado_em": "2026-11-20T21:32:01+00:00"
 }

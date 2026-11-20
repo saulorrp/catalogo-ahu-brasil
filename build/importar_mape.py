@@ -45,6 +45,9 @@ VERSAO_SCRIPT = "1.0.0"
 CAMADA_MAPE = "mape_en_v4"
 LIMIAR_SEMELHANCA = 0.9
 COLUNA_EN = "English Translation  (Doc_Text_Port)"  # com dois espaços, como no CSV
+# O MAPE traduziu com o Gemini 1.5 Flash, e 13 chamadas que falharam ficaram gravadas como
+# "tradução" (a mensagem de erro da API). Elas nunca vão para o app.
+FALHA_DE_TRADUCAO = "Exception occurred"
 
 FONTE = {
     "titulo": "Mapping the Atlantic Portuguese Empire (MAPE) dataset",
@@ -92,6 +95,10 @@ def semelhanca(a, b) -> float:
     return difflib.SequenceMatcher(None, a, b, autojunk=False).ratio()
 
 
+def traducao_valida(en) -> bool:
+    return isinstance(en, str) and bool(en.strip()) and FALHA_DE_TRADUCAO not in en
+
+
 def ler_mape(entrada: Path) -> pd.DataFrame:
     if not entrada.exists():
         raise ErroImportacao(f"CSV do MAPE não encontrado: {entrada}")
@@ -129,7 +136,7 @@ def parear(base: pd.DataFrame, mape: pd.DataFrame) -> pd.DataFrame:
             "mape_reference_code": str(r["reference_code"]),
             "mape_ano": None if pd.isna(ano) else int(ano),
             "semelhanca": round(float(s), 4),
-            "ligado": bool(s >= LIMIAR_SEMELHANCA and isinstance(en, str) and en.strip()),
+            "ligado": bool(s >= LIMIAR_SEMELHANCA and traducao_valida(en)),
             "resumo_en": en.strip() if isinstance(en, str) else None,
         })
     df = pd.DataFrame(linhas, columns=["doc_uid", "mape_doc_id", "mape_reference_code", "mape_ano",
@@ -153,7 +160,10 @@ def importar_mape(entrada: Path, corpus: Path) -> dict:
         "fonte": FONTE,
         "regra_pareamento": "código de referência normalizado por ahu/conversor.py dos dois lados "
                             "(no catálogo, reference_code ou, sem ele, new_code)",
-        "regra_ligacao": f"semelhança (difflib, textos sem acento e sem pontuação) >= "
+        "traducao": "automática, pelo Google Gemini 1.5 Flash (descrição do dataset no Zenodo); "
+                     "sem revisão humana declarada",
+        "regra_ligacao": "tradução válida (não vazia, sem mensagem de erro da API) e semelhança "
+                         f"(difflib, textos sem acento e sem pontuação) >= "
                          f"{LIMIAR_SEMELHANCA} entre o resumo do catálogo e o Doc_Text_Port do MAPE",
         "contagens": {
             "mape_verbetes": int(len(mape)),

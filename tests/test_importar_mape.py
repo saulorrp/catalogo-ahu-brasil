@@ -48,6 +48,10 @@ def test_so_liga_a_traducao_quando_o_resumo_e_o_mesmo(tmp_path):
         linha(2, "PT/AHU/CU/019/0001/00002", "AVISO sobre outra coisa inteiramente.", "Notice."),
         linha(3, "PT/AHU/CU/019/0001/00003", "REQUERIMENTO de Fulano.", "Petition of Fulano."),
     ]))
+    falha = im.ler_mape(escrever_mape(tmp_path, [linha(
+        1, "PT/AHU/CU/019/0001/00001", "CARTA do governador ao rei.",
+        "Exception occurred: HTTPSConnectionPool(host='x', port=443): Read timed out.")]))
+    assert not im.parear(base, falha).set_index("doc_uid").loc["t:1", "ligado"]
     pares = im.parear(base, mape).set_index("doc_uid")
     assert pares.loc["t:1", "ligado"] and pares.loc["t:1", "resumo_en"] == "Letter from the governor."
     assert not pares.loc["t:2", "ligado"]            # mesmo código, outro texto: só para a auditoria

@@ -62,7 +62,7 @@
 
 <h3 id="dados">3. O que o catálogo tem, e o que não tem</h3>
 <p>Cada documento traz o resumo do catálogo do AHU como foi publicado, as três formas de cota, a data, a pasta (capitania ou região) e a <strong>tipologia</strong> (carta, ofício, requerimento…), que é a primeira palavra do verbete, normalizada e marcada quando é rara no catálogo. Os erros da fonte não são corrigidos: ganham um <span class="sic">[sic]</span> na exibição.</p>
-{% if com_en %}<p>Para {{ com_en | milhar }} documentos há também um <strong>resumo em inglês</strong>, a tradução publicada pelo projeto <em>Mapping the Atlantic Portuguese Empire</em> (MAPE). Ela só aparece quando o resumo português do MAPE é o mesmo do catálogo, e não foi revisada aqui.</p>{% endif %}
+{% if com_en %}<p>Para {{ com_en | milhar }} documentos há também um <strong>resumo em inglês</strong>, a tradução publicada pelo projeto <em>Mapping the Atlantic Portuguese Empire</em> (MAPE). Ela só aparece quando o resumo português do MAPE é o mesmo do catálogo. É tradução automática, feita pelo MAPE com o Gemini 1.5 Flash, sem revisão: na dúvida, vale o resumo em português.</p>{% endif %}
 <p>O catálogo não tem dados gerados por modelos de linguagem além dessa tradução, que é do MAPE e vem creditada em cada documento. Os modelos entram só na busca por sentido e na reordenação do topo, que não mudam nenhum dado.</p>
 
 <h3 id="licenca">Licença e crédito</h3>
