@@ -603,9 +603,9 @@ textarea { width: 100%; font-family: var(--mono); margin-bottom: 8px; }
 
 /* Rodapé: o crédito que a LICENSE-DATA.md pede a quem hospeda o catálogo. */
 .rodape { max-width: 1480px; margin: 24px auto 0; padding: 16px 24px 28px; border-top: 1px solid var(--border); color: var(--txt-muted); font-size: 0.8rem; line-height: 1.6; }
-.rodape-itens { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
-.rodape-itens li { padding-left: 1.1em; text-indent: -1.1em; }
-.rodape-itens li::before { content: "·"; display: inline-block; width: 1.1em; text-indent: 0; color: var(--txt-muted); }
+.rodape-itens { list-style: none; margin: 0; padding: 0; }
+.rodape-itens li { display: inline; }
+.rodape-itens li + li::before { content: "· "; white-space: pre; color: var(--txt-muted); }
 .rodape-rotulo { font-variant: small-caps; letter-spacing: 0.03em; color: var(--txt-secondary); }
 .rodape a { color: inherit; text-decoration: underline; text-decoration-color: var(--border); }
 .rodape a:hover { color: var(--accent-texto); }
