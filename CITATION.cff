@@ -5,8 +5,10 @@ title: "Catálogo AHU-Brasil: busca e links de acesso ao catálogo do Arquivo Hi
 version: 1.0.0
 date-released: 2026-11-20
 authors:
-  - family-names: Rocha
-    given-names: "Saulo R. P."
+  - family-names: "Pacheco Rocha"
+    given-names: "Saulo Rogério"
+    orcid: "https://orcid.org/0000-0003-3715-6706"
+    affiliation: "Universidade Federal de Santa Catarina"
 identifiers:
   - type: doi
     value: 10.5281/zenodo.18772666

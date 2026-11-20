@@ -25,7 +25,7 @@ termos da fonte. O pacote completo, se for depositado, fica em acesso restrito p
 
 ## Crédito exigido
 
-> Dados derivados: Rocha, S. R. P. *Catálogo AHU-Brasil* (2026), doi:10.5281/zenodo.18772666, CC BY 4.0.
+> Dados derivados: Pacheco Rocha, S. R., *Catálogo AHU-Brasil* (2026), doi:10.5281/zenodo.18772666, CC BY 4.0.
 > Catálogo de origem: Arquivo Histórico Ultramarino (Lisboa), catálogos publicados no Arquivo
 > Científico Tropical Digital (ACTD/IICT), e Projeto Resgate "Barão do Rio Branco"
 > (Biblioteca Nacional / Ministério da Cultura).
