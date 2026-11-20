@@ -46,10 +46,15 @@
         {% block content %}{% endblock %}
     </main>
     <footer class="rodape">
-        Dados derivados: Pacheco Rocha, S. R., <em>Catálogo AHU-Brasil</em> (2026), doi:10.5281/zenodo.18772666, CC BY 4.0.
-        Tradução inglesa: projeto MAPE (Błoch et al.), doi:10.5281/zenodo.24403753, CC BY 4.0.
-        <a href="{{ url_for('sobre') }}#licenca">Licenças</a>; Arquivo Histórico Ultramarino (Lisboa), catálogos publicados
-        no ACTD/IICT, e Projeto Resgate "Barão do Rio Branco" (Biblioteca Nacional).
+        <ul class="rodape-itens">
+            <li><span class="rodape-rotulo">Dados derivados:</span> Pacheco Rocha, S. R., <em>Catálogo AHU-Brasil</em> (2026),
+                <a href="https://doi.org/10.5281/zenodo.18772666" target="_blank" rel="noopener">doi:10.5281/zenodo.18772666</a>, CC BY 4.0</li>
+            <li><span class="rodape-rotulo">Resumos e cotas:</span> Arquivo Histórico Ultramarino (Lisboa), catálogos publicados no ACTD/IICT</li>
+            <li><span class="rodape-rotulo">Imagens e links:</span> Projeto Resgate "Barão do Rio Branco" (Biblioteca Nacional)</li>
+            <li><span class="rodape-rotulo">Tradução inglesa:</span> projeto MAPE (Błoch et al.),
+                <a href="https://doi.org/10.5281/zenodo.24403753" target="_blank" rel="noopener">doi:10.5281/zenodo.24403753</a>, CC BY 4.0</li>
+            <li><a href="{{ url_for('sobre') }}#licenca">Licenças</a></li>
+        </ul>
     </footer>
 </body>
 
