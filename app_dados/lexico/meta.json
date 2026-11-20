@@ -1,0 +1,26 @@
+{
+  "versao": "2",
+  "campos": [
+    "tipologia",
+    "descricao",
+    "pasta"
+  ],
+  "pesos": {
+    "tipologia": 1.5,
+    "descricao": 1.0,
+    "pasta": 0.5
+  },
+  "k1": 1.5,
+  "b": 0.75,
+  "documentos": 167324,
+  "avgdl": {
+    "tipologia": 1.0155327388778657,
+    "descricao": 29.047554445267863,
+    "pasta": 1.4189118118142048
+  },
+  "documentos_sem_token": {
+    "tipologia": 4737,
+    "descricao": 31,
+    "pasta": 12687
+  }
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Catálogo AHU-Brasil{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', path='icone.svg') }}?v=5" type="image/svg+xml" sizes="any">
+    <link rel="icon" href="{{ url_for('static', path='icone-escuro.svg') }}?v=5" type="image/svg+xml"
+        media="(prefers-color-scheme: dark)" sizes="any">
+    <link rel="icon" href="{{ url_for('static', path='icone-32.png') }}?v=5" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="{{ url_for('static', path='apple-touch-icon.png') }}?v=5">
+    <script>try { var t = localStorage.getItem('ahu-tema'); if (t === 'branco') t = 'papel'; if (t) document.documentElement.dataset.tema = t; } catch (e) { }</script>
+    {% block head %}{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', path='catalogo.css') }}?v=6">
+    <script src="{{ url_for('static', path='htmx.min.js') }}" defer></script>
+    <script src="{{ url_for('static', path='catalogo.js') }}?v=5" defer></script>
+</head>
+{% set aba %}{% block aba %}{% endblock %}{% endset %}
+{% set aba = aba | trim %}
+{% if total_selecao is not defined %}{% set total_selecao = conta_selecao(request) %}{% endif %}
+
+<body>
+    <div id="carregando" class="barra-carregando" aria-hidden="true"></div>
+    <header class="topo">
+        <a class="marca" href="{{ url_for('busca') }}"><svg class="marca-logo" viewBox="0 0 32 32" aria-hidden="true"><path d="M7 3h13l6 6v20H7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M20 3v6h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M11 13h11M11 17h11M11 21h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="21.5" cy="24" r="3.6" fill="currentColor"/></svg> Catálogo AHU-Brasil</a>
+        <nav class="abas" aria-label="Seções">
+            <a href="{{ url_for('busca') }}" class="aba {% if aba == 'busca' %}atual{% endif %}" {% if aba=='busca'
+                %}aria-current="page" {% endif %}>Busca</a>
+            <a href="{{ url_for('selecao') }}" class="aba {% if aba == 'selecao' %}atual{% endif %}" {% if
+                aba=='selecao' %}aria-current="page" {% endif %}>Seleção {% include "_conta_aba.html" %}</a>
+            <a href="{{ url_for('conversor') }}" class="aba {% if aba == 'conversor' %}atual{% endif %}" {% if
+                aba=='conversor' %}aria-current="page" {% endif %}>Conversor</a>
+            <a href="{{ url_for('sobre') }}" class="aba {% if aba == 'sobre' %}atual{% endif %}" {% if aba=='sobre'
+                %}aria-current="page" {% endif %}>Sobre</a>
+        </nav>
+        <label class="tema">Tema
+            <select id="escolha-tema" aria-label="Tema da página">
+                <option value="">Automático</option>
+                <option value="papel">Papel</option>
+                <option value="escuro">Escuro</option>
+            </select>
+        </label>
+    </header>
+    <main class="conteudo {% block classe_conteudo %}{% endblock %}">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="rodape">
+        Resumos e cotas: Arquivo Histórico Ultramarino (Lisboa), catálogos publicados no ACTD/IICT, e Projeto Resgate
+        "Barão do Rio Branco" (Biblioteca Nacional). Dados derivados: Rocha, S. R. P., <em>Catálogo AHU-Brasil</em>
+        (2026), doi:10.5281/zenodo.18772666, CC BY 4.0. <a href="{{ url_for('sobre') }}#licenca">Licenças</a>
+    </footer>
+</body>
+
+</html>

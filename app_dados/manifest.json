@@ -1,0 +1,162 @@
+{
+  "versao_artefatos": "1",
+  "gerado_em": "2026-11-20T18:54:47+00:00",
+  "processo": {
+    "script": "build/construir_app.py",
+    "versao_script": "1.0.0",
+    "commit": "sem-commit"
+  },
+  "corpus": {
+    "versao_corpus": "0.1.0",
+    "gerado_em": "2026-11-20T18:51:28+00:00",
+    "colecoes": [
+      "ahu-brasil"
+    ],
+    "camadas": {
+      "tipologia": "tipologia_v1",
+      "embeddings": "embeddings_e5small_v1"
+    },
+    "manifesto": {
+      "versao_corpus": "0.1.0",
+      "colecoes": {
+        "ahu-brasil": {
+          "atualizado_em": "2026-11-20T18:41:22+00:00",
+          "arquivos": {
+            "colecoes/ahu-brasil/documentos.parquet": "d76b89a7c767f0dfdfff7666d5f28a41f01d1ed37af05ace306419b962fa6547",
+            "colecoes/ahu-brasil/registro_ids.json": "116946954760d74924eac3bed3b5565f58c9b4b4d7e5e5c44839d524ec048f76",
+            "colecoes/ahu-brasil/camada.json": "244fdea57bc7cb6457f6eab9b7d360ea9d5e86c021d52bad15343c2a5e370034"
+          }
+        }
+      },
+      "camadas": {
+        "tipologia_v1": {
+          "tipo": "tipologia",
+          "versao": "1",
+          "documentos": 167324,
+          "arquivos": {
+            "camadas/tipologia_v1/tipologia.parquet": "ff87cc87813cdc466d08a3f04990b15f797bd599dad0693a8476d69a6d93eabc",
+            "camadas/tipologia_v1/camada.json": "5ba72918990a438bdbe3bd97587e4f663fd5d47a16eda08d43ec8d6aa98f463e"
+          },
+          "ativa": true
+        },
+        "embeddings_e5small_v1": {
+          "tipo": "embeddings",
+          "versao": "1",
+          "modelo": "intfloat/multilingual-e5-small",
+          "documentos": 167324,
+          "arquivos": {
+            "camadas/embeddings_e5small_v1/embeddings.f16.npy": "73e28f3c187fa3eba2e1af75f3351d9ce12470e69b731d1a5243f956ba2e3b0a",
+            "camadas/embeddings_e5small_v1/indice.parquet": "33a61691481253d4dda6561d54913ed4b6350ed5269b46b0326e6d8c1b296b34",
+            "camadas/embeddings_e5small_v1/camada.json": "49102c2fad49a6c005e7a0c80f783bb84d53941c6bf2871b2894c11e144404d7"
+          },
+          "ativa": true
+        }
+      },
+      "gerado_em": "2026-11-20T18:51:28+00:00"
+    }
+  },
+  "modelo_embeddings": {
+    "nome": "intfloat/multilingual-e5-small",
+    "dimensao": 384,
+    "prefixo_consulta": "query: ",
+    "normalizado_l2": true
+  },
+  "lexico": {
+    "versao": "2",
+    "pesos": {
+      "tipologia": 1.5,
+      "descricao": 1.0,
+      "pasta": 0.5
+    },
+    "campos": [
+      "tipologia",
+      "descricao",
+      "pasta"
+    ],
+    "k1": 1.5,
+    "b": 0.75
+  },
+  "modelos": {
+    "fonte": "https://huggingface.co/{repositorio}/resolve/{revisao}",
+    "repositorios": {
+      "Xenova/multilingual-e5-small": {
+        "revisao": "761b726dd34fb83930e26aab4e9ac3899aa1fa78",
+        "arquivos": {
+          "onnx/model.onnx": "4aa845c27760e06e9a686b9d8b5d440eae4b6612cd09e5b522b716d3941f77ff",
+          "onnx/model_quantized.onnx": "f80102d3f2a1229f387d3c81909990d8945513e347b0eab049f7de3c6f98c193",
+          "tokenizer.json": "0b44a9d7b51c3c62626640cda0e2c2f70fdacdc25bbbd68038369d14ebdf4c39"
+        }
+      },
+      "Xenova/multilingual-e5-base": {
+        "revisao": "1ec9243030a27d1a115d5c340572074c125b58b2",
+        "arquivos": {
+          "onnx/model.onnx": "84a4d426f7e87a6bf5bf195f0bae2c4a7d15f675b23ca96f42fab8326d7a77aa",
+          "onnx/model_quantized.onnx": "df7a9a29309e3ad491e1783adf8baee710262cc06079c7cbab63c630277fac94",
+          "tokenizer.json": "62c24cdc13d4c9952d63718d6c9fa4c287974249e16b7ade6d5a85e7bbb75626"
+        }
+      },
+      "Xenova/multilingual-e5-large": {
+        "revisao": "00fc3aeb3dbb95842de2ac1961d33c6319acf57b",
+        "arquivos": {
+          "onnx/model.onnx": "8e17fbd06c54c2a53b467f5b127230f798d4fb69c5344ef9a9d6fa463862c453",
+          "onnx/model.onnx_data": "0cf1883fee81c63819a44e2ba0efa51d4043d9759685a4ebebbde97e0623d15c",
+          "onnx/model_quantized.onnx": "0a8d65db9a36f810ba5da15249f13145fcdc7890e6656f1fd38cd8b7c4db1fca",
+          "tokenizer.json": "62c24cdc13d4c9952d63718d6c9fa4c287974249e16b7ade6d5a85e7bbb75626"
+        }
+      },
+      "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1": {
+        "revisao": "1427fd652930e4ba29e8149678df786c240d8825",
+        "arquivos": {
+          "onnx/model.onnx": "3e9a03ed1e966f7c5288dd4230e3d6a9bf5e3a170a06f1f4241c5bca12c6487c",
+          "onnx/model_quint8_avx2.onnx": "6c2513767fb63d008a4377bef7a7a3555433d9436342bb53e35a3a72ffc52d4b",
+          "tokenizer.json": "62c24cdc13d4c9952d63718d6c9fa4c287974249e16b7ade6d5a85e7bbb75626"
+        }
+      }
+    },
+    "espelhos": {
+      "intfloat/multilingual-e5-small": "Xenova/multilingual-e5-small",
+      "intfloat/multilingual-e5-base": "Xenova/multilingual-e5-base",
+      "intfloat/multilingual-e5-large": "Xenova/multilingual-e5-large"
+    },
+    "arquivo_consulta": "onnx/model.onnx"
+  },
+  "acertos": {
+    "new_code_sem_cabecalho": 3059,
+    "referencia_refeita": 119,
+    "cota_em_bloco_curada": 45,
+    "pasta_grafia_unificada": 0,
+    "ano_falso_corrigido": 48,
+    "digitarq_com_registro": 157334,
+    "digitarq_sem_registro": 221,
+    "digitarq_registro_diferente": 17076,
+    "resgate_com_quadro": 151307,
+    "duplicatas_ignoradas_na_busca": 188
+  },
+  "contagens": {
+    "documentos": 167324,
+    "colecoes": {
+      "ahu-brasil": 167324
+    }
+  },
+  "doc_uids_sha256": "8bb19d5264cd0d399220e00f738d4bcf5c241c39aaa49da33b8c6fb346616398",
+  "artefatos": {
+    "documentos.parquet": "360fac169556f254288ebbc30ee3abda2fb2878e4838a4e156d96dfe875d8c2d",
+    "apelidos.json": "8143001957991583c921c34de2db0a9b5725e4738a475cfd5796a0c7b52b246b",
+    "embeddings/parte_000.f16.npy": "0000bbd0146a777fad029a854c0dcc70f63d9112c0ef270e316bcb3df8837089",
+    "embeddings/parte_001.f16.npy": "adfe21b7af052f0e65585854184aeb468435884b06ab48f9249fd332d345c910",
+    "lexico/meta.json": "686292f7422c87b81aa3923c755c73487ab8884462d1f4c1454c683cc4cfa0d0",
+    "lexico/lexico.sqlite": "ea7ad5c41fe96196d54a3779b7e8e4d7083584466ce81add7532966be317bdf0",
+    "lexico/tipologia.ptr.npy": "16983800ad8f148a3c59d8f7f346649e02d5502d813d1cb62aa5f98828b3d97a",
+    "lexico/tipologia.doc.npy": "e127d0518044a56dd3a7568b1e45893077b26a71c475f03c602be97994e4c556",
+    "lexico/tipologia.tf.npy": "de4a60dd41910ac3379e11ec963572b353404b21fd371485ab19791236acf9f2",
+    "lexico/tipologia.len.npy": "337124e1cf9f9703e4c1906597b2271139e611adb38edafd0c28bd09923e300f",
+    "lexico/descricao.ptr.npy": "88b2dba04937020ea608c3ffa6e7138ac2966f184e9be2af125befdcbc078083",
+    "lexico/descricao.doc.npy": "0676683daa5fe7428f9d8b101720ebd475963909ca331213dcd8a1f262439659",
+    "lexico/descricao.tf.npy": "3e96e92a9bd4c6f61515ac5f1e73e67cd17660df620d53256dfae8b302fc3902",
+    "lexico/descricao.len.npy": "15db4abc11cbb382bd5b79d8f9b7a1d28627bd323450d09b500be05f1c11b51d",
+    "lexico/pasta.ptr.npy": "126d6d595b4e9d10ef1b96081dd176c88fd610ed5d1c64937d7721e65a77d8db",
+    "lexico/pasta.doc.npy": "3cefd73e14e8e8b7efecd6b8d44be34157468e555fa6d994b0559f29ee7fff95",
+    "lexico/pasta.tf.npy": "396387bba77608d5039f44fdec11aed70f8878113a210ab07325819c266743d6",
+    "lexico/pasta.len.npy": "03493b5252f2f779bb7a6119b78328073401fcd35bd55d87ac8333788cdd1f4e"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "versao_corpus": "0.1.0",
+  "colecoes": {
+    "ahu-brasil": {
+      "atualizado_em": "2026-11-20T18:41:22+00:00",
+      "arquivos": {
+        "colecoes/ahu-brasil/documentos.parquet": "d76b89a7c767f0dfdfff7666d5f28a41f01d1ed37af05ace306419b962fa6547",
+        "colecoes/ahu-brasil/registro_ids.json": "116946954760d74924eac3bed3b5565f58c9b4b4d7e5e5c44839d524ec048f76",
+        "colecoes/ahu-brasil/camada.json": "244fdea57bc7cb6457f6eab9b7d360ea9d5e86c021d52bad15343c2a5e370034"
+      }
+    }
+  },
+  "camadas": {
+    "tipologia_v1": {
+      "tipo": "tipologia",
+      "versao": "1",
+      "documentos": 167324,
+      "arquivos": {
+        "camadas/tipologia_v1/tipologia.parquet": "ff87cc87813cdc466d08a3f04990b15f797bd599dad0693a8476d69a6d93eabc",
+        "camadas/tipologia_v1/camada.json": "5ba72918990a438bdbe3bd97587e4f663fd5d47a16eda08d43ec8d6aa98f463e"
+      },
+      "ativa": true
+    },
+    "embeddings_e5small_v1": {
+      "tipo": "embeddings",
+      "versao": "1",
+      "modelo": "intfloat/multilingual-e5-small",
+      "documentos": 167324,
+      "arquivos": {
+        "camadas/embeddings_e5small_v1/embeddings.f16.npy": "73e28f3c187fa3eba2e1af75f3351d9ce12470e69b731d1a5243f956ba2e3b0a",
+        "camadas/embeddings_e5small_v1/indice.parquet": "33a61691481253d4dda6561d54913ed4b6350ed5269b46b0326e6d8c1b296b34",
+        "camadas/embeddings_e5small_v1/camada.json": "49102c2fad49a6c005e7a0c80f783bb84d53941c6bf2871b2894c11e144404d7"
+      },
+      "ativa": true
+    }
+  },
+  "gerado_em": "2026-11-20T18:51:28+00:00"
+}

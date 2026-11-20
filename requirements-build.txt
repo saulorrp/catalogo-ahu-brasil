@@ -1,0 +1,13 @@
+# Construção do corpus, fora do app.
+#
+# O `build/construir_indice.py` codifica os documentos com o `sentence-transformers`, e é por
+# isso que o `torch` existe aqui. Em execução o app não o importa.
+
+-r requirements.txt
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+sentence-transformers==5.2.3
+torch==2.8.0+cpu
+
+# Só para o build/construir_estatico.py (modelo estático da versão leve).
+model2vec==0.10.0

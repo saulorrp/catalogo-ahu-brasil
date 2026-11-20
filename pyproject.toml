@@ -1,0 +1,19 @@
+[project]
+name = "catalogo-ahu-brasil"
+version = "1.0.0"
+description = "Catálogo AHU-Brasil: busca, links de acesso, conversor de cotas e lista em PDF para os documentos avulsos do AHU sobre o Brasil"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+extend-exclude = ["corpus", "app_dados", "coleta"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
