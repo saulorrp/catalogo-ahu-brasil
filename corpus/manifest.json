@@ -32,7 +32,17 @@
         "camadas/embeddings_e5small_v1/camada.json": "49102c2fad49a6c005e7a0c80f783bb84d53941c6bf2871b2894c11e144404d7"
       },
       "ativa": true
+    },
+    "mape_en_v6": {
+      "tipo": "traducao_en",
+      "versao": "6",
+      "documentos": 144368,
+      "arquivos": {
+        "camadas/mape_en_v6/mape.parquet": "40b2c3bc8126dd988a939b3f85d3bef0ae5be5871e43c7f69d1372941895a6d9",
+        "camadas/mape_en_v6/camada.json": "a9bb6f6db865bd499cb11634982cbddddea88fc28ae10a2fc830fd0414b71fc0"
+      },
+      "ativa": true
     }
   },
-  "gerado_em": "2026-11-20T18:51:28+00:00"
+  "gerado_em": "2026-11-20T22:04:53+00:00"
 }
