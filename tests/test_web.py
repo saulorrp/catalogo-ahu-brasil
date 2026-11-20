@@ -251,8 +251,8 @@ def test_resultado_abre_em_gaveta(client):
     # Ícone do catálogo no cabeçalho e no favicon da aba, e tema papel/escuro sem "branco"
     assert 'class="marca-logo"' in html
     assert '<span class="fleurao" aria-hidden="true">❦</span>' not in html
-    assert 'icone.svg?v=5" type="image/svg+xml" sizes="any"' in html
-    assert 'icone-escuro.svg?v=5"' in html
+    assert 'icone.svg?v=6" type="image/svg+xml" sizes="any"' in html
+    assert 'icone-escuro.svg?v=6"' in html
     assert 'sizes="any"' in html
     assert 'value="papel"' in html
     assert 'value="escuro"' in html
@@ -267,8 +267,8 @@ def test_resultado_abre_em_gaveta(client):
 
     icone_svg = (static_dir / "icone.svg").read_text(encoding="utf-8")
     icone_escuro_svg = (static_dir / "icone-escuro.svg").read_text(encoding="utf-8")
-    # Ícone próprio do catálogo: um documento com selo bordô, sem o corvo de antes.
-    assert "#800000" in icone_svg and "#f5efe2" in icone_svg
-    assert "#e3b7b0" in icone_escuro_svg and "#26201c" in icone_escuro_svg
+    # O corvo como ícone (preto no tema claro, branco no escuro).
+    assert "#111111" in icone_svg and "#ffffff" in icone_svg
+    assert "#ffffff" in icone_escuro_svg
 
 
