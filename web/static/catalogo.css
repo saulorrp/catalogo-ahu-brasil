@@ -602,7 +602,12 @@ textarea { width: 100%; font-family: var(--mono); margin-bottom: 8px; }
 .linha-do-tempo figcaption { margin: 8px 0; color: var(--txt-secondary); font-size: 0.88rem; }
 
 /* Rodapé: o crédito que a LICENSE-DATA.md pede a quem hospeda o catálogo. */
-.rodape { max-width: 1480px; margin: 24px auto 0; padding: 16px 24px 28px; border-top: 1px solid var(--border); color: var(--txt-muted); font-size: 0.8rem; }
+.rodape { max-width: 1480px; margin: 24px auto 0; padding: 16px 24px 28px; border-top: 1px solid var(--border); color: var(--txt-muted); font-size: 0.8rem; line-height: 1.6; }
+.rodape-itens { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; column-gap: 0.6em; }
+.rodape-itens li + li::before { content: "·"; margin-right: 0.6em; color: var(--txt-muted); }
+.rodape-rotulo { font-variant: small-caps; letter-spacing: 0.03em; color: var(--txt-secondary); }
+.rodape a { color: inherit; text-decoration: underline; text-decoration-color: var(--border); }
+.rodape a:hover { color: var(--accent-texto); }
 
 /* ---------- Telas estreitas ---------- */
 
