@@ -48,7 +48,9 @@ def texto_da_fonte(pasta: Path, url: str, cache: dict) -> str | None:
             "catalogo-documentos-castro-e-almeida-rio-de-janeiro-ahu-1617-1757.pdf": "rio-de-janeiro-castro-e-almeida.pdf",  # noqa: E501
         }
         nomes = [nome] + ([apelidos[nome]] if nome in apelidos else [])
-        for p in [q for n in nomes for q in [pasta / "pdf" / n, *pasta.glob(f"**/{n}")]]:
+        # a cópia de 21/11 prefixa o nome com seção e pasta: "secao__pasta__nome.pdf"
+        achados = [[pasta / "pdf" / n, *pasta.glob(f"**/{n}"), *pasta.glob(f"**/*__{n}")] for n in nomes]
+        for p in [q for grupo in achados for q in grupo]:
             if p.exists():
                 txt = subprocess.run(["pdftotext", str(p), "-"], capture_output=True).stdout.decode(
                     "utf-8", "replace"
