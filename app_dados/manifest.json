@@ -1,14 +1,14 @@
 {
   "versao_artefatos": "1",
-  "gerado_em": "2026-11-20T22:08:41+00:00",
+  "gerado_em": "2026-11-21T12:46:21+00:00",
   "processo": {
     "script": "build/construir_app.py",
     "versao_script": "1.0.0",
-    "commit": "e7b079f"
+    "commit": "2dc8d83"
   },
   "corpus": {
     "versao_corpus": "0.1.0",
-    "gerado_em": "2026-11-20T22:04:53+00:00",
+    "gerado_em": "2026-11-21T12:42:24+00:00",
     "colecoes": [
       "ahu-brasil"
     ],
@@ -21,11 +21,11 @@
       "versao_corpus": "0.1.0",
       "colecoes": {
         "ahu-brasil": {
-          "atualizado_em": "2026-11-20T18:41:22+00:00",
+          "atualizado_em": "2026-11-21T12:39:40+00:00",
           "arquivos": {
-            "colecoes/ahu-brasil/documentos.parquet": "d76b89a7c767f0dfdfff7666d5f28a41f01d1ed37af05ace306419b962fa6547",
+            "colecoes/ahu-brasil/documentos.parquet": "0e8e004fa4e0092ce6c4869bddd63b878188fdf534f22b3104a99c4f7b93e9b9",
             "colecoes/ahu-brasil/registro_ids.json": "116946954760d74924eac3bed3b5565f58c9b4b4d7e5e5c44839d524ec048f76",
-            "colecoes/ahu-brasil/camada.json": "244fdea57bc7cb6457f6eab9b7d360ea9d5e86c021d52bad15343c2a5e370034"
+            "colecoes/ahu-brasil/camada.json": "8d251852bf5da8f3233b0e49f0cdbf7d0b0a1b7c609829e14814a714e1b416af"
           }
         }
       },
@@ -35,8 +35,8 @@
           "versao": "1",
           "documentos": 167324,
           "arquivos": {
-            "camadas/tipologia_v1/tipologia.parquet": "ff87cc87813cdc466d08a3f04990b15f797bd599dad0693a8476d69a6d93eabc",
-            "camadas/tipologia_v1/camada.json": "5ba72918990a438bdbe3bd97587e4f663fd5d47a16eda08d43ec8d6aa98f463e"
+            "camadas/tipologia_v1/tipologia.parquet": "a75ab764d1d68b02e015f73a65816d0cef9380052a4b3bb4bf11421535a358f4",
+            "camadas/tipologia_v1/camada.json": "5d9f9ac476fb8f09135d69cc36b318e19f1c3b3e1645361d51c7564bc0eb59e3"
           },
           "ativa": true
         },
@@ -46,9 +46,9 @@
           "modelo": "intfloat/multilingual-e5-small",
           "documentos": 167324,
           "arquivos": {
-            "camadas/embeddings_e5small_v1/embeddings.f16.npy": "73e28f3c187fa3eba2e1af75f3351d9ce12470e69b731d1a5243f956ba2e3b0a",
-            "camadas/embeddings_e5small_v1/indice.parquet": "33a61691481253d4dda6561d54913ed4b6350ed5269b46b0326e6d8c1b296b34",
-            "camadas/embeddings_e5small_v1/camada.json": "49102c2fad49a6c005e7a0c80f783bb84d53941c6bf2871b2894c11e144404d7"
+            "camadas/embeddings_e5small_v1/embeddings.f16.npy": "273e821e3cfba750d546d37a55e5d1f818fdfe503be5fe10cc417dd3ab0fcf64",
+            "camadas/embeddings_e5small_v1/indice.parquet": "84a4c071dcb3253cead689d3fded5e8cad2c7335ef3c46d95c547786f0204cdc",
+            "camadas/embeddings_e5small_v1/camada.json": "1c3224a105761d5b742ed6ac7357f8f02b09b478a204a77afe6ef462d3866d7a"
           },
           "ativa": true
         },
@@ -63,7 +63,7 @@
           "ativa": true
         }
       },
-      "gerado_em": "2026-11-20T22:04:53+00:00"
+      "gerado_em": "2026-11-21T12:42:24+00:00"
     }
   },
   "modelo_embeddings": {
@@ -151,20 +151,20 @@
   },
   "doc_uids_sha256": "8bb19d5264cd0d399220e00f738d4bcf5c241c39aaa49da33b8c6fb346616398",
   "artefatos": {
-    "documentos.parquet": "41e90558c9dcf6a94fb6d165a15a8f32e2518b3f4fa789bbf616c60a31ae3d6d",
+    "documentos.parquet": "771620e2622a737e98d1550bebf110b611d4d2c7e2b6f59f3a02c4117544d9a1",
     "apelidos.json": "8143001957991583c921c34de2db0a9b5725e4738a475cfd5796a0c7b52b246b",
-    "embeddings/parte_000.f16.npy": "0000bbd0146a777fad029a854c0dcc70f63d9112c0ef270e316bcb3df8837089",
-    "embeddings/parte_001.f16.npy": "adfe21b7af052f0e65585854184aeb468435884b06ab48f9249fd332d345c910",
-    "lexico/meta.json": "686292f7422c87b81aa3923c755c73487ab8884462d1f4c1454c683cc4cfa0d0",
-    "lexico/lexico.sqlite": "ea7ad5c41fe96196d54a3779b7e8e4d7083584466ce81add7532966be317bdf0",
-    "lexico/tipologia.ptr.npy": "16983800ad8f148a3c59d8f7f346649e02d5502d813d1cb62aa5f98828b3d97a",
-    "lexico/tipologia.doc.npy": "e127d0518044a56dd3a7568b1e45893077b26a71c475f03c602be97994e4c556",
-    "lexico/tipologia.tf.npy": "de4a60dd41910ac3379e11ec963572b353404b21fd371485ab19791236acf9f2",
-    "lexico/tipologia.len.npy": "337124e1cf9f9703e4c1906597b2271139e611adb38edafd0c28bd09923e300f",
-    "lexico/descricao.ptr.npy": "88b2dba04937020ea608c3ffa6e7138ac2966f184e9be2af125befdcbc078083",
-    "lexico/descricao.doc.npy": "0676683daa5fe7428f9d8b101720ebd475963909ca331213dcd8a1f262439659",
-    "lexico/descricao.tf.npy": "3e96e92a9bd4c6f61515ac5f1e73e67cd17660df620d53256dfae8b302fc3902",
-    "lexico/descricao.len.npy": "15db4abc11cbb382bd5b79d8f9b7a1d28627bd323450d09b500be05f1c11b51d",
+    "embeddings/parte_000.f16.npy": "c9bc09fc15b9564544794e7fa9017494d064a15c92e91f0ccbf763f864a3cb9d",
+    "embeddings/parte_001.f16.npy": "a8d3b2c6285d4653597f4d84b5970137cb4b0471daaddd26582ccde0d605f34d",
+    "lexico/meta.json": "294055f086357c95052c3da004f6f2f9d1f1f717d55cecc55369653173afba06",
+    "lexico/lexico.sqlite": "f549bfb4e39f8e16181bf03e54d300f40bd3a2d2c44488ca784eddd50a8c2fba",
+    "lexico/tipologia.ptr.npy": "b88b8fe709c346ebb093048311343913adb6649df466ef31eb1902b2ffbc17fc",
+    "lexico/tipologia.doc.npy": "1f12ce7d157b398b6bb2c28b37b4d33e3216952a3fd78418f446da2ede7d0e06",
+    "lexico/tipologia.tf.npy": "097f9d6fffbc736fc9d98443fbb7b39e20693acb83c975136a78c89b70e05664",
+    "lexico/tipologia.len.npy": "e8000e82c236942da8eba97afc8865f40696e956888671704a3aceedd0585949",
+    "lexico/descricao.ptr.npy": "ba1b68be2587924c2d10298beeeaa2d221a0fae1257a61a37ca9475817cac9f0",
+    "lexico/descricao.doc.npy": "6a41fd55e853655fc4f5ec7f69935d1a7814748934e7c4c48c1f9296370e5df4",
+    "lexico/descricao.tf.npy": "fd8e0dce8e0da43cb999fe2caf93bff499255288a5c9c880ac4345600dab195b",
+    "lexico/descricao.len.npy": "85340503eb0fee4149f19a9bff3b488b7fd23a81b8c6421ee579269d70e9563f",
     "lexico/pasta.ptr.npy": "126d6d595b4e9d10ef1b96081dd176c88fd610ed5d1c64937d7721e65a77d8db",
     "lexico/pasta.doc.npy": "3cefd73e14e8e8b7efecd6b8d44be34157468e555fa6d994b0559f29ee7fff95",
     "lexico/pasta.tf.npy": "396387bba77608d5039f44fdec11aed70f8878113a210ab07325819c266743d6",

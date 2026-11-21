@@ -31,5 +31,38 @@
     "fonte_texto": "str",
     "qc": "str"
   },
-  "origem": "Arquivo Histórico Ultramarino (AHU): catálogos publicados no ACTD/IICT e no Projeto Resgate 'Barão do Rio Branco' (Biblioteca Nacional). Resumos e cotas pertencem a essas instituições e são creditados como tal."
+  "origem": "Arquivo Histórico Ultramarino (AHU): catálogos publicados no ACTD/IICT e no Projeto Resgate 'Barão do Rio Branco' (Biblioteca Nacional). Resumos e cotas pertencem a essas instituições e são creditados como tal.",
+  "correcoes_lastro": {
+    "script": "build/corrigir_com_lastro.py",
+    "padrao_ouro_sha256": "d86354af1b8a87d4a4c2b3f12e4f992ca4de62c5cf00ff6df734441ba5b02817",
+    "documentos_corrigidos": 7554,
+    "documentos_com_notas_fonte": 105408,
+    "por_campo": {
+      "description": 7500,
+      "extracted_typology": 1812,
+      "document_id_and_date": 1458,
+      "ano_isolado": 223,
+      "new_code": 57
+    },
+    "por_motivo": {
+      "resumo:sobra_no_fim": 5490,
+      "tipologia:do_resumo_corrigido": 1812,
+      "resumo:sem_inicio_que_foi_para_a_data": 1202,
+      "data:sem_inicio_que_foi_para_a_data": 1199,
+      "resumo:data_no_resumo": 513,
+      "data:data_no_resumo": 254,
+      "ano:da_data_corrigida": 223,
+      "resumo:sem_fim": 162,
+      "resumo:sem_inicio": 62,
+      "cota:texto_colado_depois": 57,
+      "resumo:diferente": 22,
+      "resumo:sobra_nas_pontas": 15,
+      "resumo:parecido": 15,
+      "resumo:variante": 7,
+      "data:resumo_na_data": 5,
+      "resumo:resumo_na_data": 5,
+      "resumo:vazio": 5,
+      "resumo:sobra_no_inicio": 2
+    }
+  }
 }

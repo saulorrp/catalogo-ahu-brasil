@@ -2,11 +2,11 @@
   "versao_corpus": "0.1.0",
   "colecoes": {
     "ahu-brasil": {
-      "atualizado_em": "2026-11-20T18:41:22+00:00",
+      "atualizado_em": "2026-11-21T12:39:40+00:00",
       "arquivos": {
-        "colecoes/ahu-brasil/documentos.parquet": "d76b89a7c767f0dfdfff7666d5f28a41f01d1ed37af05ace306419b962fa6547",
+        "colecoes/ahu-brasil/documentos.parquet": "0e8e004fa4e0092ce6c4869bddd63b878188fdf534f22b3104a99c4f7b93e9b9",
         "colecoes/ahu-brasil/registro_ids.json": "116946954760d74924eac3bed3b5565f58c9b4b4d7e5e5c44839d524ec048f76",
-        "colecoes/ahu-brasil/camada.json": "244fdea57bc7cb6457f6eab9b7d360ea9d5e86c021d52bad15343c2a5e370034"
+        "colecoes/ahu-brasil/camada.json": "8d251852bf5da8f3233b0e49f0cdbf7d0b0a1b7c609829e14814a714e1b416af"
       }
     }
   },
@@ -16,8 +16,8 @@
       "versao": "1",
       "documentos": 167324,
       "arquivos": {
-        "camadas/tipologia_v1/tipologia.parquet": "ff87cc87813cdc466d08a3f04990b15f797bd599dad0693a8476d69a6d93eabc",
-        "camadas/tipologia_v1/camada.json": "5ba72918990a438bdbe3bd97587e4f663fd5d47a16eda08d43ec8d6aa98f463e"
+        "camadas/tipologia_v1/tipologia.parquet": "a75ab764d1d68b02e015f73a65816d0cef9380052a4b3bb4bf11421535a358f4",
+        "camadas/tipologia_v1/camada.json": "5d9f9ac476fb8f09135d69cc36b318e19f1c3b3e1645361d51c7564bc0eb59e3"
       },
       "ativa": true
     },
@@ -27,9 +27,9 @@
       "modelo": "intfloat/multilingual-e5-small",
       "documentos": 167324,
       "arquivos": {
-        "camadas/embeddings_e5small_v1/embeddings.f16.npy": "73e28f3c187fa3eba2e1af75f3351d9ce12470e69b731d1a5243f956ba2e3b0a",
-        "camadas/embeddings_e5small_v1/indice.parquet": "33a61691481253d4dda6561d54913ed4b6350ed5269b46b0326e6d8c1b296b34",
-        "camadas/embeddings_e5small_v1/camada.json": "49102c2fad49a6c005e7a0c80f783bb84d53941c6bf2871b2894c11e144404d7"
+        "camadas/embeddings_e5small_v1/embeddings.f16.npy": "273e821e3cfba750d546d37a55e5d1f818fdfe503be5fe10cc417dd3ab0fcf64",
+        "camadas/embeddings_e5small_v1/indice.parquet": "84a4c071dcb3253cead689d3fded5e8cad2c7335ef3c46d95c547786f0204cdc",
+        "camadas/embeddings_e5small_v1/camada.json": "1c3224a105761d5b742ed6ac7357f8f02b09b478a204a77afe6ef462d3866d7a"
       },
       "ativa": true
     },
@@ -44,5 +44,5 @@
       "ativa": true
     }
   },
-  "gerado_em": "2026-11-20T22:04:53+00:00"
+  "gerado_em": "2026-11-21T12:42:24+00:00"
 }

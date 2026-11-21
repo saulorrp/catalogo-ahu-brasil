@@ -15,7 +15,7 @@
   "documentos": 167324,
   "max_tokens": 512,
   "receita_texto": "passage: <extracted_typology>. <folder>. <description> (partes vazias são omitidas; separador '. ')",
-  "texto_global_sha1": "c5f37831a7f1a3b3851b9be5d4d98aa81983e126",
+  "texto_global_sha1": "6dcb93465ffb952d05dce506e568240dd9899cea",
   "esquema": {
     "embeddings.f16.npy": "float16[n, dimensao], linha i = indice.parquet linha i",
     "indice.parquet": "doc_uid, texto_sha1"
@@ -23,7 +23,7 @@
   "processo": {
     "script": "build/construir_indice.py",
     "versao_script": "1.0.0",
-    "commit": "sem-commit",
+    "commit": "2dc8d83",
     "dispositivo": "cpu (padrão; usa GPU se disponível)"
   },
   "bibliotecas": {
@@ -32,7 +32,7 @@
     "sentence-transformers": "5.2.3",
     "torch": "2.8.0+cpu"
   },
-  "data": "2026-11-20T18:51:28+00:00",
+  "data": "2026-11-21T12:42:24+00:00",
   "sanidade": [
     {
       "doc_uid": "ahu-brasil:19e2b6ff20",
