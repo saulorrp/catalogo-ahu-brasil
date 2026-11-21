@@ -23,6 +23,9 @@ entra neste repositório. `tests/test_nucleo_publico.py` cobra isso.
 1. **O app só lê `app_dados/`.** Nunca lê `corpus/` nem as camadas brutas.
 2. **Os resumos do AHU nunca são reescritos.** Erros da fonte ficam como estão e ganham `[sic]` só
    na exibição; correções vão para colunas separadas. Ver [`LICENSE-DATA.md`](LICENSE-DATA.md).
+   Erro de *leitura* do PDF (rodapé colado, começo do resumo na data) não é erro da fonte: o
+   `build/corrigir_com_lastro.py` devolve o texto impresso, só com prova do lastro, e registra
+   cada troca em `corpus/colecoes/ahu-brasil/correcoes_lastro.parquet`.
 3. **Nada pago em funcionamento.** Chamadas a modelos pagos, se houver, só na construção dos dados.
 4. **`doc_uid` é interno.** Não entra em rótulo, tabela nem PDF: o pesquisador vê cota, ano e
    resumo. Uids antigos continuam abrindo pelo `app_dados/apelidos.json` (redirecionamento 301).
@@ -56,6 +59,7 @@ python scripts/gate.py                          # ruff + pytest; PASS antes de c
 python -m uvicorn web.main:app --port 8000      # o catálogo em http://localhost:8000
 
 python build/importar_colecao.py --entrada documentos.parquet --colecao ahu-brasil
+python build/corrigir_com_lastro.py --ouro padrao_ouro.parquet   # erros de leitura, com prova (lastro)
 python build/importar_camadas.py --entrada documentos.parquet --colecao ahu-brasil  # tipologia
 python build/importar_mape.py --entrada mape_dataset_version_6.csv  # tradução inglesa (MAPE)
 python build/construir_indice.py --modelo intfloat/multilingual-e5-small

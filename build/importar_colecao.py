@@ -40,7 +40,7 @@ from build.importar_base import (  # noqa: E402
 
 VERSAO_SCRIPT = "1.0.0"
 # Campos próprios da coleção que o app pode mostrar: o link do documento no site e a citação.
-CAMPOS_EXTRAS = ["caminho_resgate", "url_actd", "pagina_actd", "fonte_texto", "qc"]
+CAMPOS_EXTRAS = ["caminho_resgate", "url_actd", "pagina_actd", "fonte_texto", "qc", "notas_fonte"]
 COLUNA_UID_ANTIGO = "ahu_sul_doc_uid"
 GRAFIAS = {"Espirito Santo": "Espírito Santo"}
 
