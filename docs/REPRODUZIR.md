@@ -65,7 +65,7 @@ Números de 26/11/2026, MAPE v6 contra a base do ACTD:
 | | Base do ACTD (site) | Base do MAPE |
 |---|---:|---:|
 | Verbetes | 167.327 | 145.103 |
-| Com link para a imagem no Resgate | 91,8% | cerca de 96% |
+| Com link para a imagem no Resgate | 91,8% | 96,6% |
 | Tradução inglesa | MAPE + tradução própria | a do MAPE |
 
 O que a base do MAPE não tem:
@@ -83,3 +83,6 @@ O que a base do MAPE não tem:
 - Verbetes e tradução inglesa: do MAPE, CC BY 4.0, que reproduz as descrições do AHU no DigitArq.
   Cite o MAPE e o Arquivo Histórico Ultramarino.
 - Nada da base do MAPE é redistribuído por este projeto: o CSV vem sempre do Zenodo do MAPE.
+
+Os números completos da montagem e a comparação série a série estão em
+[`BASE_MAPE.md`](BASE_MAPE.md); as partes do catálogo, em [`MODULOS.md`](MODULOS.md).

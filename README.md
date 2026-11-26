@@ -64,7 +64,7 @@ em [`coleta/`](coleta/). Fontes e links também na aba **Sobre** do catálogo.
 
 ## Como o repositório está organizado
 
-O catálogo tem três partes, e só duas delas estão aqui:
+O catálogo tem três partes, e só duas delas estão aqui ([`docs/MODULOS.md`](docs/MODULOS.md)):
 
 | Parte | O que é | Onde está |
 |---|---|---|
@@ -79,7 +79,11 @@ Há duas bases possíveis:
   do autor e num registro de acesso restrito no Zenodo.
 - **MAPE**, aberta: os verbetes do dataset do projeto MAPE (CC BY 4.0). Qualquer pessoa pode montar
   o catálogo com ela seguindo [`docs/REPRODUZIR.md`](docs/REPRODUZIR.md). A edição fica um pouco
-  menor (145.103 verbetes), sem a Série Reino, os Códices e outras séries que o MAPE não cobre.
+  menor (145.103 verbetes), sem a Série Reino, os Códices e outras séries que o MAPE não cobre
+  ([`docs/BASE_MAPE.md`](docs/BASE_MAPE.md)).
+
+Por que a base do ACTD não é publicada, e como foi feita: [`docs/BASE_ACTD.md`](docs/BASE_ACTD.md).
+O que mudou de versão a versão: [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Rodar no seu computador
 

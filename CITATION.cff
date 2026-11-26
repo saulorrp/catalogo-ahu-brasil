@@ -2,11 +2,13 @@ cff-version: 1.2.0
 message: "Se você usar este software ou os dados derivados, cite conforme abaixo. As licenças variam por camada: ver LICENSE-DATA.md."
 type: software
 title: "Catálogo AHU-Brasil: busca e links de acesso ao catálogo do Arquivo Histórico Ultramarino para o Brasil"
-version: 1.0.0
-date-released: 2026-11-20
+version: 2.0.0
+date-released: 2026-11-26
 authors:
-  - family-names: Rocha
-    given-names: "Saulo R. P."
+  - family-names: "Pacheco Rocha"
+    given-names: "Saulo Rogério"
+    affiliation: "Universidade Federal de Santa Catarina"
+    orcid: "https://orcid.org/0000-0003-3715-6706"
 identifiers:
   - type: doi
     value: 10.5281/zenodo.18772666
@@ -53,4 +55,4 @@ references:
         given-names: Artur
     doi: 10.5281/zenodo.24403753
     license: CC-BY-4.0
-    notes: "Tradução inglesa dos resumos (projeto Mapping the Atlantic Portuguese Empire), exibida no catálogo sem alterações"
+    notes: "Base aberta para reproduzir o catálogo (scripts/montar_base_mape.py) e tradução inglesa dos resumos, exibida sem alterações; não redistribuída por este projeto"

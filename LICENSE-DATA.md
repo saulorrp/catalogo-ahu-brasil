@@ -22,16 +22,17 @@ com uma das bases.
 Os resumos nunca são reescritos: erros da fonte ficam como estão e ganham a marca `[sic]` só na
 exibição. Correções, quando houver, vão para colunas separadas.
 
-## Depósito aberto sem os resumos
+## Depósito aberto
 
 Não há autorização do AHU nem da BN para redistribuir os resumos sob licença aberta. Por isso o
-depósito aberto dos dados (Zenodo) sai **sem os resumos**, com a coluna `sha1_resumo` e um script
-que os recoloca a partir dos PDFs públicos do ACTD; quem precisa do texto o obtém da fonte, nos
-termos da fonte. O pacote completo, se for depositado, fica em acesso restrito para pesquisa.
+depósito aberto no Zenodo (a partir da versão 4.0, de 26/11/2026) traz **só o código, o módulo de
+compatibilidade e as instruções** para montar o catálogo com a base aberta do MAPE
+([`docs/REPRODUZIR.md`](docs/REPRODUZIR.md)). Nenhum resumo do ACTD e nenhum dado do MAPE vão
+nele. A base do ACTD fica com o autor ([`docs/BASE_ACTD.md`](docs/BASE_ACTD.md)).
 
 ## Crédito exigido
 
-> Dados derivados: Rocha, S. R. P. *Catálogo AHU-Brasil* (2026), doi:10.5281/zenodo.18772666, CC BY 4.0.
+> Dados derivados: Pacheco Rocha, S. R. *Catálogo AHU-Brasil* (2026), doi:10.5281/zenodo.18772666, CC BY 4.0.
 > Catálogo de origem: Arquivo Histórico Ultramarino (Lisboa), catálogos publicados no Arquivo
 > Científico Tropical Digital (ACTD/IICT), e Projeto Resgate "Barão do Rio Branco"
 > (Biblioteca Nacional / Ministério da Cultura).
@@ -50,3 +51,5 @@ Quem hospedar o catálogo deve manter este crédito no rodapé do site.
 - 26/11/2026: catálogo em módulos. A base do ACTD sai do repositório; o módulo de compatibilidade
   (`compat/`) ganha licença própria (CC BY 4.0); o catálogo pode ser reproduzido com a base aberta
   do MAPE (`docs/REPRODUZIR.md`).
+- 26/11/2026: o depósito aberto no Zenodo passa a ser só código, compatibilidade e instruções
+  (versão 4.0); o pacote "sem os resumos" de 20/11 não é mais publicado.
