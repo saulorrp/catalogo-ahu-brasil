@@ -1,0 +1,4 @@
+{# O resumo à frente. Na página em inglês, a tradução (do MAPE ou, onde ele não traduz, a automática
+   do catálogo, com a marca "machine translation") quando existe; senão, o português. #}
+{% if en and ficha_en.resumo_en %}<div class="{{ classe_resumo }}" lang="en">{{ ficha_en.resumo_en_marcado | marcas | safe }}{% if ficha_en.resumo_en_fonte == "catalogo" %} <span class="marca-traducao" title="Machine translation made by this catalogue (not by MAPE); not reviewed">machine translation</span>{% endif %}</div>
+{% else %}<div class="{{ classe_resumo }}"{% if en %} lang="pt"{% endif %}>{{ ficha_en.resumo_marcado | marcas | safe }}</div>{% endif %}

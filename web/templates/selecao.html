@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block aba %}selecao{% endblock %}
+{% block title %}{{ tr("Seleção · Catálogo AHU", "Selection · AHU Catalogue") }}{% endblock %}
+{% block content %}
+<h1>{{ tr("Seleção", "Selection") }}</h1>
+<p class="lide">{{ tr("Os documentos que você marcou na busca, na ordem em que foram marcados. É esta lista que sai no PDF para levar ao Arquivo Histórico Ultramarino. Ela fica guardada neste navegador, não no servidor.", "The documents you marked in the search, in the order in which you marked them. This is the list that comes out in the PDF to take to the Arquivo Histórico Ultramarino. It is kept in this browser, not on the server. The PDF list is in Portuguese, the language of the archive.") }}</p>
+
+{% if total %}
+<div class="doc-actions">
+    <a href="{{ url_for('selecao_pdf') }}" class="btn btn-primario">{{ tr("Baixar a lista em PDF", "Download the PDF list") }}</a>
+    <a href="{{ url_for('busca') }}" class="btn">{{ tr("Voltar à busca", "Back to the search") }}</a>
+    <form method="post" action="{{ url_for('limpar_selecao') }}" onsubmit="return confirm('{{ tr('Esvaziar a seleção?', 'Empty the selection?') }}')">
+        <button type="submit" class="btn-texto">{{ tr("Esvaziar a seleção", "Empty the selection") }}</button>
+    </form>
+    <span class="rotulo empurra">{{ total }} {{ tr("de até", "of up to") }} {{ maximo }} {{ tr("documentos", "documents") }}</span>
+</div>
+
+<div class="tabela-rolagem">
+<table class="tabela">
+    <thead>
+        <tr><th class="num">{{ tr("Nº", "No.") }}</th><th class="num">{{ tr("Ano", "Year") }}</th><th>{{ tr("Cota", "Shelfmark") }}</th><th>{{ tr("Resumo", "Summary") }}</th><th><span class="so-leitor">{{ tr("Tirar", "Remove") }}</span></th></tr>
+    </thead>
+    <tbody>
+        {% for linha in linhas %}
+        <tr>
+            <td class="num">{{ linha.n }}</td>
+            <td class="num">{{ linha.ano or '—' }}</td>
+            <td class="cota nowrap">{{ linha.cota or '—' }}{% if linha.referencia %}<br><span class="rotulo">{{ linha.referencia }}</span>{% endif %}</td>
+            <td class="resumo"{% if en and not linha.resumo_en %} lang="pt"{% endif %}><a class="resumo-link" href="{{ url_for('doc', doc_uid=linha.uid) }}">{{ linha.resumo_en if en and linha.resumo_en else linha.resumo }}</a></td>
+            <td>
+                <form method="post" action="{{ url_for('remover_selecao', doc_uid=linha.uid) }}?volta=1">
+                    <button type="submit" class="sel-x" aria-label="{{ tr('Tirar da seleção', 'Remove from the selection') }}" title="{{ tr('Tirar da seleção', 'Remove from the selection') }}">✕</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<div class="vazio">
+    {% if en %}
+    <p><strong>The selection is empty.</strong></p>
+    <p>In the <a href="{{ url_for('busca') }}">search</a>, use <strong><span class="capitulo">⸿</span> Add to selection</strong> on each document you want to consult at the archive. They appear here and in the “Selection” drawer of the search page.</p>
+    {% else %}
+    <p><strong>A seleção está vazia.</strong></p>
+    <p>Na <a href="{{ url_for('busca') }}">busca</a>, use <strong><span class="capitulo">⸿</span> Pôr na seleção</strong> em cada documento que quiser consultar no arquivo. Eles aparecem aqui e na gaveta “Seleção” da própria busca.</p>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

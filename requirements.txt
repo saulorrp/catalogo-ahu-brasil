@@ -1,0 +1,18 @@
+# Execução do app.
+#
+# **Sem `torch` e sem `sentence-transformers`**: juntos eles custavam ~312 MiB de memória antes
+# de qualquer peso de modelo. A consulta é codificada por `onnxruntime` + `tokenizers`; os
+# vetores dos documentos são os que o `sentence-transformers` produziu na construção.
+#
+# Para reconstruir o corpus, use requirements-build.txt.
+
+pandas==2.3.3
+pyarrow==23.0.1
+numpy==2.4.3
+onnxruntime==1.28.0
+tokenizers==0.22.2
+fpdf2==2.8.9
+fastapi==0.162.5
+uvicorn[standard]==0.54.0
+jinja2==3.1.6
+python-multipart==0.0.33

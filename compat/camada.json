@@ -1,0 +1,31 @@
+{
+  "nome": "compat",
+  "tipo": "compatibilidade",
+  "versao": "1",
+  "atualizado_em": "2026-11-26",
+  "descricao": "Módulo de compatibilidade do Catálogo AHU-Brasil: liga cada cota do AHU à imagem no Projeto Resgate (DocReader da Biblioteca Nacional), ao registro do DigitArq e à cota antiga. Serve a qualquer base que traga o código de referência PT/AHU/CU.",
+  "licenca": "CC BY 4.0",
+  "credito": "Pacheco Rocha, S. R. Catálogo AHU-Brasil, módulo de compatibilidade (2026). doi:10.5281/zenodo.18772666. CC BY 4.0.",
+  "tabelas": {
+    "resgate_docreader.tsv.gz": {
+      "descricao": "código de referência -> rolo (bib) e quadro (pagfis) do DocReader do Projeto Resgate; dos links do gov.br e da varredura do DocReader (coleta/docreader/)",
+      "linhas": 152050,
+      "sha256": "d2c63db686f9e37f36bfdae137086e52afb97f8f61880a1a0c9c2298bf88b908"
+    },
+    "digitarq_referencias.tsv.gz": {
+      "descricao": "registros do DigitArq (PT/AHU/CU), listados caixa a caixa (coleta/scripts/varrer_digitarq.py)",
+      "linhas": 151986,
+      "sha256": "62d78bceafe2e09bd6ce41cd6253565619ba60b85eced1a3c1605c951a6d2c7a"
+    },
+    "resgate_codices.tsv": {
+      "descricao": "primeiro e último quadro de cada Códice no rolo CODICES do DocReader",
+      "linhas": 15,
+      "sha256": "a4af4346476b4cfc3961a3087b299491cc9d14c82a8f92835f12cb8d9ba34b42"
+    },
+    "concordancia_cota_antiga.tsv.gz": {
+      "descricao": "código de referência -> cota antiga, das cotas impressas nos catálogos do ACTD (só identificadores)",
+      "linhas": 93330,
+      "sha256": "268dad8938553740a0fbdd0ce311f8e835f632d05a1bea702d1545a81d18dcfb"
+    }
+  }
+}

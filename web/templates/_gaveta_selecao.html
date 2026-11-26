@@ -1,0 +1,39 @@
+{# A gaveta da seleção na página de busca. Volta inteira a cada mudança (hx-swap-oob). #}
+<details class="gaveta gaveta-selecao" id="gaveta-selecao" {% if fora %}hx-swap-oob="true"{% endif %} open>
+    <summary>
+        <span class="gaveta-titulo">{{ tr("Seleção", "Selection") }}</span>
+        <span class="conta{% if not linhas_selecao %} vazia{% endif %}">{{ linhas_selecao | length }}</span>
+    </summary>
+    <div class="gaveta-content">
+        {% if aviso_selecao %}<p class="aviso">{{ aviso_selecao | en }}</p>{% endif %}
+        {% if linhas_selecao %}
+        <ol class="sel-lista">
+            {% for linha in linhas_selecao %}
+            <li>
+                {% set resumo_linha = linha.resumo_en if en and linha.resumo_en else linha.resumo %}
+                <a href="{{ url_for('doc', doc_uid=linha.uid) }}" class="sel-item" title="{{ resumo_linha }}">
+                    <span class="sel-ano">{{ linha.ano or tr('s/d', 'n.d.') }}</span>
+                    <span class="cota">{{ linha.cota or linha.referencia or '—' }}</span>
+                    <span class="sel-resumo"{% if en and not linha.resumo_en %} lang="pt"{% endif %}>{{ resumo_linha }}</span>
+                </a>
+                <button type="button" class="sel-x" aria-label="{{ tr('Tirar da seleção', 'Remove from the selection') }}" title="{{ tr('Tirar da seleção', 'Remove from the selection') }}"
+                        hx-post="{{ url_for('remover_selecao', doc_uid=linha.uid) }}?de=gaveta" hx-swap="none">✕</button>
+            </li>
+            {% endfor %}
+        </ol>
+        <div class="sel-acoes">
+            <a href="{{ url_for('selecao_pdf') }}" class="btn btn-primario">{{ tr("Baixar a lista em PDF", "Download the PDF list") }}</a>
+            <a href="{{ url_for('selecao') }}" class="btn">{{ tr("Abrir a seleção", "Open the selection") }}</a>
+            <form method="post" action="{{ url_for('limpar_selecao') }}?volta=busca" onsubmit="return confirm('{{ tr('Esvaziar a seleção?', 'Empty the selection?') }}')">
+                <button type="submit" class="btn-texto">{{ tr("Esvaziar", "Empty") }}</button>
+            </form>
+        </div>
+        {% else %}
+        {% if en %}
+        <p class="sel-vazia">This is the list of the documents you want to consult at the archive. On each result, use <strong><span class="capitulo">⸿</span> Add to selection</strong>. The selection stays with you from one search to the next and comes out as a PDF, with the shelfmarks, ready to request the documents at the AHU.</p>
+        {% else %}
+        <p class="sel-vazia">Aqui fica a lista dos documentos que você quer consultar no arquivo. Em cada resultado, use <strong><span class="capitulo">⸿</span> Pôr na seleção</strong>. A seleção continua com você de uma busca para outra e sai em PDF, com as cotas, pronta para pedir os documentos no AHU.</p>
+        {% endif %}
+        {% endif %}
+    </div>
+</details>

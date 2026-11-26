@@ -1,0 +1,32 @@
+{# A gaveta secundária do resumo. Em português: a tradução inglesa. Em inglês, a tradução vai à
+   frente (no lugar do resumo) e a gaveta guarda o resumo original do catálogo do AHU. A tradução é
+   a do MAPE ou, onde o MAPE não traduz, a tradução automática do próprio catálogo; as duas são
+   creditadas em separado. #}
+{% if ficha_en.resumo_en %}
+{% set do_catalogo = ficha_en.resumo_en_fonte == "catalogo" %}
+{% if en %}
+<details class="gaveta traducao-en">
+    <summary>Original summary in Portuguese (AHU catalogue)</summary>
+    <div class="gaveta-content">
+    <p class="traducao-en-texto" lang="pt">{{ ficha_en.resumo_marcado | marcas | safe }}</p>
+    {% if do_catalogo %}
+    <p class="traducao-en-credito">The English summary above is a <strong>machine translation made by this catalogue</strong> (Google Gemini{% if ficha_en.resumo_en_modelo %}, {{ ficha_en.resumo_en_modelo }}{% endif %}, with a fixed glossary of document types; not reviewed), because the <a href="https://doi.org/10.5281/zenodo.24403753" target="_blank" rel="noopener">MAPE</a> dataset has no translation of this summary. The Portuguese summary is the one in the AHU catalogue.</p>
+    {% else %}
+    <p class="traducao-en-credito">The English summary above is the translation published by the <a href="https://doi.org/10.5281/zenodo.24403753" target="_blank" rel="noopener">MAPE</a> project (Błoch, Vasques Filho, Bojanowski, Santana, Hussain, Rzońca and Podsiadły, 2026), machine-translated by them and reproduced unchanged, CC BY 4.0. The Portuguese summary is the one in the AHU catalogue.</p>
+    {% endif %}
+    </div>
+</details>
+{% else %}
+<details class="gaveta traducao-en">
+    <summary>{% if do_catalogo %}English summary (tradução automática do catálogo){% else %}English summary (MAPE){% endif %}</summary>
+    <div class="gaveta-content">
+    <p class="traducao-en-texto" lang="en">{{ ficha_en.resumo_en }}</p>
+    {% if do_catalogo %}
+    <p class="traducao-en-credito">Tradução automática feita por este catálogo (Google Gemini{% if ficha_en.resumo_en_modelo %}, {{ ficha_en.resumo_en_modelo }}{% endif %}, com glossário fixo de tipologias; sem revisão), porque o <a href="https://doi.org/10.5281/zenodo.24403753" target="_blank" rel="noopener">MAPE</a> não traduz este resumo.</p>
+    {% else %}
+    <p class="traducao-en-credito">Tradução do projeto <a href="https://doi.org/10.5281/zenodo.24403753" target="_blank" rel="noopener">MAPE</a> (Błoch, Vasques Filho, Bojanowski, Santana, Hussain, Rzońca e Podsiadły, 2026), CC BY 4.0.</p>
+    {% endif %}
+    </div>
+</details>
+{% endif %}
+{% endif %}

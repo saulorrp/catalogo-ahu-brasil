@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block aba %}busca{% endblock %}
+{% block classe_conteudo %}conteudo-largo{% endblock %}
+
+{% macro faceta(nome, input_name, lista_opcoes, dict_counts, selecionados) %}
+    {% set itens = [] %}
+    {% for val in lista_opcoes %}
+        {% set count = dict_counts.get(val, 0) %}
+        {% if count > 0 or val in selecionados %}
+            {% set _ = itens.append((val, count)) %}
+        {% endif %}
+    {% endfor %}
+    {% set ordenados = itens | sort(attribute='1', reverse=true) %}
+    {% if ordenados %}
+    <fieldset class="filtro-grupo">
+        <legend class="filtro-titulo">{{ nome }}</legend>
+        {% for val, count in ordenados[:5] %}
+        <label class="faceta-item">
+            <input type="checkbox" name="{{ input_name }}" value="{{ val }}" {% if val in selecionados %}checked{% endif %}>
+            <span class="faceta-nome" title="{{ val }}">{{ val }}</span> <span class="faceta-count">{{ count | milhar }}</span>
+        </label>
+        {% endfor %}
+        {% if ordenados | length > 5 %}
+        {% set resto = ordenados[5:] %}
+        {% set marcados_no_resto = resto | map(attribute=0) | select('in', selecionados) | list %}
+        <details class="gaveta-mais" {% if marcados_no_resto %}open{% endif %}>
+            <summary>{{ tr("mais", "more:") }} {{ resto | length }}</summary>
+            {% for val, count in resto %}
+            <label class="faceta-item">
+                <input type="checkbox" name="{{ input_name }}" value="{{ val }}" {% if val in selecionados %}checked{% endif %}>
+                <span class="faceta-nome" title="{{ val }}">{{ val }}</span> <span class="faceta-count">{{ count | milhar }}</span>
+            </label>
+            {% endfor %}
+        </details>
+        {% endif %}
+    </fieldset>
+    {% endif %}
+{% endmacro %}
+
+{% block content %}
+<div class="busca-pagina">
+<form id="form-busca" class="busca-form" action="{{ url_for('busca') }}" method="GET" role="search"
+      hx-get="{{ url_for('busca') }}" hx-target="#busca-corpo" hx-select="#busca-corpo" hx-swap="outerHTML"
+      hx-push-url="true" hx-sync="this:replace" hx-indicator="#carregando, #busca-corpo, #buscando"
+      hx-trigger="submit, change[target.name!='q' && !target.hasAttribute('data-quieto')]">
+    <input type="hidden" name="v" value="2">
+    <div class="busca-bar">
+        <input type="search" name="q" value="{{ consulta.texto }}" id="input-busca" accesskey="/" autocomplete="off"
+               placeholder="{{ tr('Assunto, nome, lugar ou cota', 'Subject, name, place or shelfmark') }}" aria-label="{{ tr('Buscar no catálogo', 'Search the catalogue') }}" {% if inicio %}autofocus{% endif %}>
+        <button type="submit" class="btn btn-primario">{{ tr("Buscar", "Search") }}</button>
+    </div>
+    <div class="busca-opcoes">
+        <label title="{{ tr('Automático junta palavras e sentido. Exata procura só as palavras digitadas. Conceitual procura só pelo sentido.', 'Automatic combines words and meaning. Exact looks only for the words typed. Conceptual looks only by meaning.') }}">{{ tr("Modo", "Mode") }}
+            <select name="m">
+                <option value="automatico" {% if consulta.modo == 'automatico' %}selected{% endif %}>{{ tr('Automático', 'Automatic') }}</option>
+                <option value="exata" {% if consulta.modo == 'exata' %}selected{% endif %}>{{ tr('Exata (só as palavras)', 'Exact (words only)') }}</option>
+                <option value="conceitual" {% if consulta.modo == 'conceitual' %}selected{% endif %}>{{ tr('Conceitual (só o sentido)', 'Conceptual (meaning only)') }}</option>
+            </select>
+        </label>
+        <label title="{{ tr('Até onde um documento pode se afastar do sentido da consulta e ainda entrar na lista. Alto traz menos documentos, mais próximos.', 'How far a document may stray from the meaning of the query and still enter the list. High brings fewer, closer documents.') }}">{{ tr("Rigor", "Strictness") }}
+            <select name="r">
+                <option value="alto" {% if consulta.rigor == 'alto' %}selected{% endif %}>{{ tr('Alto', 'High') }}</option>
+                <option value="medio" {% if consulta.rigor == 'medio' %}selected{% endif %}>{{ tr('Médio', 'Medium') }}</option>
+                <option value="baixo" {% if consulta.rigor == 'baixo' %}selected{% endif %}>{{ tr('Baixo', 'Low') }}</option>
+            </select>
+        </label>
+        <span class="dica">{{ tr("Use aspas para a frase exata.", "Use quotation marks for the exact phrase. The summaries are in Portuguese.") }} <a href="{{ url_for('sobre') }}#busca">{{ tr("Como a busca funciona", "How the search works") }}</a></span>
+    </div>
+
+    <div id="buscando" class="buscando" role="status"><span class="giro">❦</span> {{ tr("Buscando…", "Searching…") }}</div>
+
+    <div class="busca-corpo" id="busca-corpo">
+        <aside class="filtros" id="filtros">
+            <div class="filtros-cabeca">
+                <button type="button" class="filtros-toggle" data-alterna="#filtros">{{ tr("Filtros", "Filters") }}{% if not consulta.filtros.vazio() %} <span class="conta">{{ consulta.filtros.ativos() | length }}</span>{% endif %}</button>
+                <h2>{{ tr("Filtros", "Filters") }}</h2>
+                {% if not consulta.filtros.vazio() %}
+                <a class="limpar" href="{{ url_for('busca') }}?v=2{% if consulta.texto %}&q={{ consulta.texto | urlencode }}{% endif %}&m={{ consulta.modo }}&r={{ consulta.rigor }}">{{ tr("Limpar filtros", "Clear filters") }}</a>
+                {% endif %}
+            </div>
+            <div class="filtros-corpo">
+                <fieldset class="filtro-grupo">
+                    <legend class="filtro-titulo">{{ tr("Período", "Period") }}</legend>
+                    <div class="periodo-inputs">
+                        <input type="number" name="a1" id="f-a1" value="{{ consulta.filtros.ano_de or '' }}" placeholder="{{ tr('De', 'From') }}" aria-label="{{ tr('Ano inicial', 'Start year') }}" inputmode="numeric">
+                        <span aria-hidden="true">–</span>
+                        <input type="number" name="a2" id="f-a2" value="{{ consulta.filtros.ano_ate or '' }}" placeholder="{{ tr('Até', 'To') }}" aria-label="{{ tr('Ano final', 'End year') }}" inputmode="numeric">
+                    </div>
+                    {% if facetas.decada and facetas.decada | length > 1 %}
+                    {% set maximo = facetas.decada.values() | max %}
+                    {% set decadas = facetas.decada.items() | sort %}
+                    {# Só as décadas com peso: datas soltas muito fora esticariam o eixo. #}
+                    {% set visiveis = [] %}
+                    {% for d, n in decadas %}{% if n * 200 >= maximo %}{% set _ = visiveis.append(d) %}{% endif %}{% endfor %}
+                    {% if visiveis | length > 1 %}
+                    <div class="mini-decadas" role="group" aria-label="{{ tr('Documentos por década; clique para filtrar', 'Documents per decade; click to filter') }}">
+                        {% for d in range(visiveis[0], visiveis[-1] + 10, 10) %}
+                        {% set n = facetas.decada.get(d, 0) %}
+                        <button type="button" class="mini-barra" {% if n %}data-decada="{{ d }}"{% else %}disabled{% endif %} title="{% if en %}{{ d }}s: {{ n | milhar }} document(s).{% if n %} Click to filter.{% endif %}{% else %}Década de {{ d }}: {{ n | milhar }} documento(s).{% if n %} Clique para filtrar.{% endif %}{% endif %}" aria-label="{% if en %}{{ d }}s: {{ n }} documents{% else %}Década de {{ d }}: {{ n }} documentos{% endif %}"><span style="height: {{ (n / maximo * 100) | round(1) }}%"></span></button>
+                        {% endfor %}
+                    </div>
+                    <div class="mini-decadas-eixo"><span>{{ visiveis[0] }}</span><span>{{ tr("por década", "per decade") }}</span><span>{{ visiveis[-1] + 9 }}</span></div>
+                    {% endif %}
+                    {% endif %}
+                    <label class="faceta-item"><input type="checkbox" name="sd" value="1" {% if consulta.filtros.sem_data %}checked{% endif %}> {{ tr("Incluir documentos sem data", "Include undated documents") }}</label>
+                </fieldset>
+
+                {{ faceta(tr('Capitania ou região', 'Captaincy or region'), 'fp', opcoes.pastas, facetas.folder or {}, consulta.filtros.pastas) }}
+                {{ faceta(tr('Tipologia', 'Document type'), 'ft', opcoes.tipologias | map(attribute=0) | list, facetas.tipologia or {}, consulta.filtros.tipologias) }}
+
+                {% if opcoes.mostrar_colecao %}
+                {{ faceta(tr('Coleção', 'Collection'), 'fc', opcoes.colecoes, facetas.colecao or {}, consulta.filtros.colecoes) }}
+                {% endif %}
+
+
+            </div>
+        </aside>
+
+        <section class="resultados-area" aria-label="{{ tr('Resultados', 'Results') }}">
+            {% if inicio %}
+            <div class="boas-vindas">
+                {% if en %}
+                <h1>Catalogue of the documents in the Arquivo Histórico Ultramarino on colonial Brazil</h1>
+                <p>{{ resposta.total | milhar }} entries from the catalogues of the Overseas Council (Conselho Ultramarino). Search by subject, name, place or shelfmark, keep what interests you in the <strong>selection</strong> and take the PDF list to the archive. The summaries are in Portuguese; the English translation (MAPE's or, where MAPE has none, the catalogue's own machine translation) is shown first, with the original summary in a drawer below it.</p>
+                {% else %}
+                <h1>Catálogo dos documentos do Arquivo Histórico Ultramarino sobre o Brasil</h1>
+                <p>{{ resposta.total | milhar }} verbetes dos catálogos do Conselho Ultramarino. Busque por assunto, nome, lugar ou cota, guarde na <strong>seleção</strong> o que interessa e leve ao arquivo a lista em PDF.</p>
+                {% endif %}
+                <p class="exemplos"><span class="rotulo">{{ tr("Experimente:", "Try:") }}</span>
+                    <a href="{{ url_for('busca') }}?v=2&q=contrabando+de+gado">contrabando de gado</a>
+                    <a href="{{ url_for('busca') }}?v=2&q=deser%C3%A7%C3%A3o+de+soldados">deserção de soldados</a>
+                    <a href="{{ url_for('busca') }}?v=2&q=Gomes+Freire+de+Andrade">Gomes Freire de Andrade</a>
+                    <a href="{{ url_for('busca') }}?v=2&q=Col%C3%B4nia+do+Sacramento">Colônia do Sacramento</a>
+                </p>
+            </div>
+            {% endif %}
+            <div class="resultados-header">
+                <span class="total-resultados"><strong>{{ resposta.total | milhar }}</strong> {% if en %}{{ 'document' if resposta.total == 1 else 'documents' }}{% if inicio %} in the catalogue{% endif %}{% else %}{{ 'documento' if resposta.total == 1 else 'documentos' }}{% if inicio %} no catálogo{% endif %}{% endif %}
+                    {% if pendente %}<span id="refinando" class="refinando htmx-indicator"><span class="giro">❦</span> {{ tr("refinando a ordem…", "refining the order…") }}</span>{% endif %}
+                </span>
+                <label class="ordenar">{{ tr("Ordenar por", "Sort by") }}
+                    <select name="o">
+                        <option value="relevancia" {% if consulta.ordenacao == 'relevancia' %}selected{% endif %}>{{ tr('Relevância', 'Relevance') }}</option>
+                        <option value="ano_asc" {% if consulta.ordenacao == 'ano_asc' %}selected{% endif %}>{{ tr('Ano, do mais antigo', 'Year, oldest first') }}</option>
+                        <option value="ano_desc" {% if consulta.ordenacao == 'ano_desc' %}selected{% endif %}>{{ tr('Ano, do mais recente', 'Year, newest first') }}</option>
+                    </select>
+                </label>
+            </div>
+            {% for aviso in resposta.avisos %}
+            <p class="aviso">{{ aviso | en }}</p>
+            {% endfor %}
+
+            <div id="lista-resultados" {% if pendente %}hx-get="{{ url_for('resultados') }}?{{ query }}&fino=1" hx-trigger="load" hx-target="this" hx-swap="innerHTML" hx-select="unset" hx-push-url="false" hx-indicator="#refinando"{% endif %}>
+                {% include "_resultados_itens.html" %}
+            </div>
+            {% include "_carregar_mais.html" %}
+        </section>
+    </div>
+</form>
+
+<aside class="coluna-selecao" aria-label="{{ tr('Seleção', 'Selection') }}">
+    {% include "_gaveta_selecao.html" %}
+</aside>
+</div>
+{% endblock %}

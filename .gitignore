@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.venv/
+.env
+*.key
+*.pkl
+*.npy
+
+# Dados: nenhuma base vai para o repositório (ver corpus/LEIA-ME.md e app_dados/LEIA-ME.md).
+# A base do ACTD fica numa pasta privada do autor; a do MAPE se monta com scripts/montar_base_mape.py.
+/corpus/*
+!/corpus/LEIA-ME.md
+/app_dados/*
+!/app_dados/LEIA-ME.md
+/dados/*
+!/dados/LEIA-ME.md
+
+# Cache de modelos ONNX, se algum dia cair dentro do repositório por engano.
+/C/
+modelos_onnx/
+*.onnx

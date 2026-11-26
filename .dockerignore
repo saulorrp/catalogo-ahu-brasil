@@ -1,0 +1,9 @@
+.git
+corpus/
+app_dados/
+dados/
+avaliacao/
+tests/
+**/__pycache__
+.pytest_cache
+.ruff_cache

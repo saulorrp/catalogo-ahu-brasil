@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ tr("Seção retirada · Catálogo AHU", "Section withdrawn · AHU Catalogue") }}{% endblock %}
+{% block content %}
+<div class="prosa">
+<h1>{{ tr("Esta seção não faz mais parte do catálogo", "This section is no longer part of the catalogue") }}</h1>
+<p>{{ tr("O Catálogo AHU-Brasil passou a reunir só a busca, os links para os acervos, o conversor de cotas e a lista em PDF. As páginas de pessoas, amostras e painel saíram.", "The AHU-Brazil Catalogue now brings together only the search, the links to the collections, the shelfmark converter and the PDF list. The pages for people, samples and dashboard were removed.") }}</p>
+<p><a class="btn btn-primario" href="{{ url_for('busca') }}">{{ tr("Ir para a busca", "Go to the search") }}</a></p>
+</div>
+{% endblock %}

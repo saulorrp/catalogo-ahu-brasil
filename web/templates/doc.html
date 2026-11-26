@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block aba %}busca{% endblock %}
+
+{% set cota_principal = ficha.cotas.get('Código de referência', ficha.cotas.get('Código atual', ficha.cotas.get('Código antigo', ''))) %}
+{% block title %}{{ cota_principal }}{% if ficha.ano %} · {{ ficha.ano }}{% endif %} — {{ tr('Catálogo AHU', 'AHU Catalogue') }}{% endblock %}
+
+{% block head %}
+<meta name="citation_title" content="{{ ficha.titulo }}">
+{% if ficha.ano %}<meta name="citation_publication_date" content="{{ ficha.ano }}">{% endif %}
+{% endblock %}
+
+{% block content %}
+<article class="doc-page">
+    <a class="voltar" href="{{ url_for('busca') }}" onclick="if (history.length > 1 && document.referrer) { history.back(); return false; }">← {{ tr("Voltar aos resultados", "Back to the results") }}</a>
+    <header class="doc-header">
+        <p class="doc-sobretitulo"><span class="ano-destaque">{{ ficha.ano or tr('s/d', 'n.d.') }}</span>{% if ficha.tipologia %} · {{ ficha.tipologia }}{% endif %}{% if ficha.pasta %} · {{ ficha.pasta }}{% endif %}</p>
+        <h1 class="cota">{{ cota_principal }}</h1>
+    </header>
+
+    {% set ficha_en = ficha %}{% set classe_resumo = "doc-resumo resumo" %}{% include "_resumo_principal.html" %}
+    {% include "_traducao_en.html" %}
+
+    <div class="doc-actions">
+        {% set uid = ficha.doc_uid %}
+        {% include "_botao_selecao.html" %}
+        <button type="button" class="btn" data-copiar="{{ cota_principal }}">{{ tr("Copiar a cota", "Copy the shelfmark") }}</button>
+        <a href="{{ email_de_documento(ficha.doc_uid, cota_principal, ficha.titulo) }}" class="btn-texto empurra">{{ tr("Reportar erro", "Report an error") }}</a>
+    </div>
+
+    <div class="doc-meta">
+        <div class="meta-section">
+            <h3>{{ tr("Cotas", "Shelfmarks") }}</h3>
+            <table class="cota-sheet">
+                <tbody>
+                    {% for k, v in ficha.cotas.items() %}
+                    <tr>
+                        <th scope="row" class="cota-rotulo">{{ k | en }}</th>
+                        <td class="cota-valor"><span class="cota">{{ v }}</span></td>
+                        <td class="cota-acao">
+                            <button type="button" class="btn-icone btn-copiar" data-copiar="{{ v }}" title="{{ tr('Copiar', 'Copy') }} {{ k | en }}" aria-label="{{ tr('Copiar', 'Copy') }} {{ k | en }}">⧉</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="meta-section">
+            <h3>{{ tr("Onde ver o documento", "Where to see the document") }}</h3>
+            {% if ficha.cotas.get('Cota impressa na fonte') %}
+            <p class="aviso aviso-cota">{{ tr("Cota corrigida pelo catálogo: a fonte imprime a cota da linha “Cota impressa na fonte”, que no AHU (DigitArq) é de outro documento. As outras cotas e os links são os do AHU para este documento, conferidos no DigitArq.", "Shelfmark corrected by the catalogue: the source prints the shelfmark in the line “Shelfmark as printed in the source”, which at the AHU (DigitArq) belongs to another document. The other shelfmarks and the links are the AHU ones for this document, checked in DigitArq.") }}</p>
+            {% endif %}
+            {% if ficha.links.aviso_cota %}
+            <p class="aviso aviso-cota">{{ tr("Cota não oficial: a fonte não traz a cota AHU deste documento, e a cota acima foi montada pelo catálogo a partir da numeração do inventário. Por isso não há link para o DigitArq nem para o Projeto Resgate.", "Unofficial shelfmark: the source gives no AHU shelfmark for this document, and the one above was built by the catalogue from the inventory numbering. That is why there is no link to DigitArq or Projeto Resgate.") }}</p>
+            {% endif %}
+            <div class="links-sheet">
+                {% if ficha.links.digitarq %}
+                <a href="{{ ficha.links.digitarq }}" target="_blank" rel="noopener" class="links-sheet-btn">{{ ficha.links.digitarq_rotulo | en }}</a>
+                {% endif %}
+                {% if ficha.links.resgate_direto %}
+                <a href="{{ ficha.links.resgate }}" target="_blank" rel="noopener" class="links-sheet-btn"{% if ficha.links.resgate_dica %} title="{{ ficha.links.resgate_dica | en }}"{% endif %}>{{ ficha.links.resgate_rotulo | en }}</a>
+                {% elif ficha.links.resgate %}
+                <span class="links-sheet-btn desativado" aria-disabled="true" title="{{ tr('Link direto da imagem no Projeto Resgate ainda não registrado para este documento', 'No direct link to the image in Projeto Resgate has been recorded for this document yet') }}">{{ tr("Imagem no Projeto Resgate", "Image in Projeto Resgate") }}</span>
+                {% endif %}
+            </div>
+        </div>
+        
+    </div>
+</article>
+{% endblock %}

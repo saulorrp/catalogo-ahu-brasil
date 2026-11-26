@@ -1,0 +1,47 @@
+# Coleta do catálogo AHU-Brasil
+
+Os scripts que montaram a coleção `ahu-brasil`, publicados como rodaram, para que a coleta possa ser
+refeita e conferida. O método está em [`../docs/METODO_COLETA.md`](../docs/METODO_COLETA.md), e as
+fontes, com endereços e data de acesso, em [`FONTES.md`](FONTES.md).
+
+Os scripts não fazem parte do app nem passam pelo `ruff` e pelos testes do repositório. Eles leem e
+escrevem numa pasta de trabalho (`R`, o primeiro argumento), fora do repositório.
+
+## Ordem
+
+| Passo | Script | O que faz |
+|---|---|---|
+| 1 | `mapear_arvore.py`, `mapear_faltantes.py` | Rastreiam as páginas do Projeto Resgate no gov.br e gravam a árvore de endereços |
+| 2 | `colher_html.py`, `colher_faltantes.py` | Baixam as páginas e PDFs e os guardam como vieram (`raw/`, `fontes/`) |
+| 3 | `parse_verbetes.py`, `parse_texto.py`, `parse_sergipe.py`, `parse_codices.py` | Separam os verbetes de cada formato do Resgate (tabela HTML, texto de PDF, Sergipe, Códices) |
+| 4 | `pdf_para_texto.py`, `parse_actd.py` | Extraem o texto dos catálogos do ACTD (lista em `series_actd.tsv`) e separam os verbetes |
+| 5 | `juntar.py` | Junta as fontes por chave de cota, atribui `doc_uid` estável e guarda o uid que o documento tinha na versão anterior do catálogo (`ahu_sul_doc_uid`, que vira apelido) |
+| 6 | `qc_banco.py` | Marca os verbetes suspeitos e escreve `qc/RELATORIO_QC.md` |
+| 6b | `conferir_ocr.py` | Compara o OCR dos catálogos escaneados com o texto do ACTD, pela cota |
+| 7 | `exportar_colecao.py` | Gera o parquet da coleção com as cotas calculadas por `ahu/conversor.py` |
+| 8 | `../build/importar_colecao.py` | Importa a coleção no corpus do app |
+| 9 | `varrer_digitarq.py` | Lista os registros do DigitArq caixa a caixa e grava `corpus/digitarq_referencias.tsv.gz`, que dá a cada documento o registro do DigitArq que o contém (`../build/cotas.py`) |
+| 9b | `varrer_docreader.py` | Percorre os 19 rolos do DocReader da BN por salto exponencial + busca binária (`docreader/LEIA-ME.md`) e grava `docreader/resgate_pagfis_<bib>.tsv.gz` (`127.029` linhas) |
+| 9c | `juntar_docreader.py` | Converte os TSVs de `docreader/` (incluindo `sergipe_govbr_pagfis.tsv.gz`) em referências CRAV e consolida `corpus/resgate_docreader.tsv.gz` (`142.057` entradas, `141.298` casadas em `app_dados/`) |
+| 10 | `checksums_fontes.py` | Grava `fontes_checksums.tsv`: URL, data de acesso, tamanho e SHA-256 de cada PDF do ACTD |
+| 11 | `reidratar_resumos.py`, `conferir_reidratacao.py` | Reconstituem os resumos a partir dos PDFs do ACTD (`url_actd` + `pagina_actd`), conferindo cada um pelo `sha1_resumo`; servem para publicar os dados sem os resumos |
+
+## OCR dos catálogos escaneados
+
+`baixar_docvirt.py` e `ocr/scripts/baixar_paginas.py` baixam as imagens das páginas (docvirt), e
+`ocr/scripts/extrair_bn.py` as dos PDFs da BN. As instruções de transcrição dadas ao Gemini Flash
+estão em `ocr/PROMPT_OCR.md`. Em `ocr/scripts/`:
+
+| Script | O que faz |
+|---|---|
+| `ocr_gemini.py` | Transcrição pelo Gemini (gratuito, em fila, com pausa quando a cota acaba) |
+| `ocr_batch.py` | Transcrição pela Batch API paga do Gemini, com teto de gasto e pausa por arquivo |
+| `tesseract_estoque.py`, `qualidade_tesseract.py` | Tesseract 5.4 nas páginas e medida da sua qualidade |
+| `corrigir_tesseract.py` | Correção do texto do Tesseract pelo Gemini, olhando a imagem (páginas recusadas) |
+| `auditar_saidas.py`, `painel.py` | Conferência das saídas e painel de andamento |
+| `teste_correcao_texto.py` | Teste de qualidade usado para escolher o modelo de correção |
+
+As chaves de API vêm de variáveis de ambiente; nenhuma está nos arquivos.
+
+O texto transcrito serve de conferência do ACTD, não de fonte. `scripts/conferir_ocr.py` faz essa
+conferência, e o resultado está em [`qc/RELATORIO_CONFERENCIA_OCR.md`](qc/RELATORIO_CONFERENCIA_OCR.md).

@@ -1,0 +1,80 @@
+{% for r, f in fichas %}
+{% set uid = f.doc_uid %}
+{% set marcado = f.doc_uid in na_selecao %}
+{% set cota_principal = f.cotas.get('Código de referência', f.cotas.get('Código atual', f.cotas.get('Código antigo', ''))) %}
+<article class="resultado-card">
+    <details class="gaveta resultado-gaveta">
+        <summary class="resultado-summary">
+            <div class="resultado-sumario-corpo">
+                <header class="resultado-header">
+                    <span class="ano-destaque">{{ f.ano or tr('s/d', 'n.d.') }}</span>
+                    {% if f.pasta %}<span class="resultado-pasta">{{ f.pasta }}</span>{% endif %}
+                    {% if f.tipologia %}<span class="resultado-tipologia">{{ f.tipologia }}</span>{% endif %}
+                    <span class="cota">{{ cota_principal }}</span>
+                </header>
+                {% set ficha_en = f %}{% set classe_resumo = "resumo" %}{% include "_resumo_principal.html" %}
+            </div>
+        </summary>
+        <div class="gaveta-content resultado-detalhes">
+            {% set ficha_en = f %}{% include "_traducao_en.html" %}
+            {% if f.cotas %}
+            <div class="resultado-secao">
+                <h4>{{ tr("Cotas", "Shelfmarks") }}</h4>
+                <table class="cota-sheet">
+                    <tbody>
+                        {% for k, v in f.cotas.items() %}
+                        <tr>
+                            <th scope="row" class="cota-rotulo">{{ k | en }}</th>
+                            <td class="cota-valor"><span class="cota">{{ v }}</span></td>
+                            <td class="cota-acao">
+                                <button type="button" class="btn-icone btn-copiar" data-copiar="{{ v }}" title="{{ tr('Copiar', 'Copy') }} {{ k | en }}" aria-label="{{ tr('Copiar', 'Copy') }} {{ k | en }}">⧉</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            {% if f.links.digitarq or f.links.resgate or f.links.aviso_cota %}
+            <div class="resultado-secao">
+                <h4>{{ tr("Onde ver o documento", "Where to see the document") }}</h4>
+                {% if f.cotas.get('Cota impressa na fonte') %}
+                <p class="aviso aviso-cota">{{ tr("Cota corrigida pelo catálogo: a fonte imprime a cota da linha “Cota impressa na fonte”, que no AHU (DigitArq) é de outro documento. As outras cotas e os links são os do AHU para este documento, conferidos no DigitArq.", "Shelfmark corrected by the catalogue: the source prints the shelfmark in the line “Shelfmark as printed in the source”, which at the AHU (DigitArq) belongs to another document. The other shelfmarks and the links are the AHU ones for this document, checked in DigitArq.") }}</p>
+                {% endif %}
+                {% if f.links.aviso_cota %}
+                <p class="aviso aviso-cota">{{ tr("Cota não oficial: a fonte não traz a cota AHU deste documento, e a cota acima foi montada pelo catálogo a partir da numeração do inventário. Por isso não há link para o DigitArq nem para o Projeto Resgate.", "Unofficial shelfmark: the source gives no AHU shelfmark for this document, and the one above was built by the catalogue from the inventory numbering. That is why there is no link to DigitArq or Projeto Resgate.") }}</p>
+                {% endif %}
+                <div class="links-sheet">
+                    {% if f.links.digitarq %}
+                    <a href="{{ f.links.digitarq }}" target="_blank" rel="noopener" class="links-sheet-btn">{{ f.links.digitarq_rotulo | en }}</a>
+                    {% endif %}
+                    {% if f.links.resgate_direto %}
+                    <a href="{{ f.links.resgate }}" target="_blank" rel="noopener" class="links-sheet-btn"{% if f.links.resgate_dica %} title="{{ f.links.resgate_dica | en }}"{% endif %}>{{ f.links.resgate_rotulo | en }}</a>
+                    {% elif f.links.resgate %}
+                    <span class="links-sheet-btn desativado" aria-disabled="true" title="{{ tr('Link direto da imagem no Projeto Resgate ainda não registrado para este documento', 'No direct link to the image in Projeto Resgate has been recorded for this document yet') }}">{{ tr("Imagem no Projeto Resgate", "Image in Projeto Resgate") }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="resultado-meta-acoes">
+                <a href="{{ email_de_documento(f.doc_uid, cota_principal, f.titulo) }}" class="btn-texto">{{ tr("Reportar erro", "Report an error") }}</a>
+            </div>
+        </div>
+    </details>
+    <div class="resultado-acoes">
+        {% include "_botao_selecao.html" %}
+    </div>
+</article>
+{% else %}
+<div class="vazio">
+    {% if en %}
+    <p><strong>No documents found.</strong></p>
+    <p>Try fewer words, another spelling, or the <em>Conceptual</em> mode, which searches by meaning. If filters are checked, try removing one. The summaries are in Portuguese, so words in Portuguese find more.</p>
+    {% else %}
+    <p><strong>Nenhum documento encontrado.</strong></p>
+    <p>Tente menos palavras, outra grafia, ou o modo <em>Conceitual</em>, que procura pelo sentido. Se há filtros marcados, experimente tirar algum.</p>
+    {% endif %}
+</div>
+{% endfor %}

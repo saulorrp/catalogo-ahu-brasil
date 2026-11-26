@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block aba %}sobre{% endblock %}
+{% block title %}{{ tr("Sobre · Catálogo AHU", "About · AHU Catalogue") }}{% endblock %}
+{% block content %}
+<nav class="subabas" aria-label="{{ tr('Sobre', 'About') }}">
+    <a class="atual" href="{{ url_for('sobre') }}">{{ tr("Sobre e método", "About and method") }}</a>
+    <a href="{{ url_for('referencias') }}">{{ tr("Referências e fontes", "References and sources") }}</a>
+</nav>
+<div class="prosa">
+<h1>{{ tr("Sobre e método", "About and method") }}</h1>
+{% if en %}<p>This catalogue leads from a question to the shelfmarks of the loose documents (<em>avulsos</em>) of the Arquivo Histórico Ultramarino concerning Brazil, with links to view them in DigitArq and in Projeto Resgate, a converter between the three forms of shelfmark and a PDF list to take to the archive. It does <strong>not</strong> contain the images of the manuscripts.</p>{% else %}<p>Este catálogo leva de uma pergunta às cotas dos documentos avulsos do Arquivo Histórico Ultramarino sobre o Brasil, com os links para vê-los no DigitArq e no Projeto Resgate, um conversor entre as três formas de cota e uma lista em PDF para levar ao arquivo. Ele <strong>não</strong> contém as imagens dos manuscritos.</p>{% endif %}
+
+{% if linha.decadas %}
+<h3 id="linha-do-tempo">{{ tr("O catálogo no tempo", "The catalogue over time") }}</h3>
+{% if en %}<p>Of the {{ linha.total | milhar }} documents in the catalogue, how many come from each decade, from {{ linha.inicio }} to {{ linha.fim }}.</p>{% else %}<p>Dos {{ linha.total | milhar }} documentos do catálogo, quantos são de cada década, de {{ linha.inicio }} a {{ linha.fim }}.</p>{% endif %}
+{% set L = 56 %}{% set T = 12 %}{% set W = 760 %}{% set H = 220 %}
+{% set n = linha.decadas | length %}
+{% set passo = (W - L - 8) / n %}
+<figure class="linha-do-tempo">
+    <svg viewBox="0 0 {{ W }} {{ H + 40 }}" role="img" aria-label="{% if en %}Bar chart: documents per decade, from {{ linha.inicio }} to {{ linha.fim }}. The decade with most documents has {{ linha.maximo | milhar }}.{% else %}Gráfico de barras: documentos por década, de {{ linha.inicio }} a {{ linha.fim }}. A década com mais documentos tem {{ linha.maximo | milhar }}.{% endif %}">
+        {% for i in range(5) %}
+        {% set y = T + H - (H * i / 4) %}
+        <line x1="{{ L }}" x2="{{ W - 8 }}" y1="{{ y }}" y2="{{ y }}" class="grade"/>
+        <text x="{{ L - 8 }}" y="{{ y + 4 }}" text-anchor="end" class="eixo">{{ (linha.teto * i / 4) | int | milhar }}</text>
+        {% endfor %}
+        {% for d, c in linha.decadas %}
+        {% set h = H * c / linha.teto %}
+        {% set x = L + loop.index0 * passo %}
+        <rect x="{{ (x + 2) | round(1) }}" y="{{ (T + H - h) | round(1) }}" width="{{ (passo - 4) | round(1) }}" height="{{ h | round(1) }}" rx="2" class="barra"><title>{% if en %}{{ d }}s: {{ c | milhar }} documents{% else %}Década de {{ d }}: {{ c | milhar }} documentos{% endif %}</title></rect>
+        {% if d % 50 == 0 %}
+        <line x1="{{ (x + passo / 2) | round(1) }}" x2="{{ (x + passo / 2) | round(1) }}" y1="{{ T + H }}" y2="{{ T + H + 5 }}" class="grade"/>
+        <text x="{{ (x + passo / 2) | round(1) }}" y="{{ T + H + 20 }}" text-anchor="middle" class="eixo">{{ d }}</text>
+        {% endif %}
+        {% endfor %}
+        <text x="{{ L + (W - L - 8) / 2 }}" y="{{ T + H + 38 }}" text-anchor="middle" class="eixo titulo-eixo">{{ tr("década", "decade") }}</text>
+    </svg>
+    <figcaption>{% if en %}Documents per decade. Hover over a bar to see the number.{% if linha.sem_data or linha.fora %} Left out of the chart: {{ linha.sem_data | milhar }} undated documents{% if linha.fora %} and {{ linha.fora | milhar }} dated before {{ linha.inicio }} or after {{ linha.fim }}{% endif %}.{% endif %}{% else %}Documentos por década. Passe o cursor sobre uma barra para ver o número.{% if linha.sem_data or linha.fora %} Ficam fora do gráfico {{ linha.sem_data | milhar }} documentos sem data{% if linha.fora %} e {{ linha.fora | milhar }} com data anterior a {{ linha.inicio }} ou posterior a {{ linha.fim }}{% endif %}.{% endif %}{% endif %}</figcaption>
+    <details class="gaveta">
+        <summary>{{ tr("Ver os números", "See the numbers") }}</summary>
+        <div class="gaveta-content">
+            <table class="tabela tabela-estreita">
+                <thead><tr><th>{{ tr("Década", "Decade") }}</th><th class="num">{{ tr("Documentos", "Documents") }}</th></tr></thead>
+                <tbody>{% for d, c in linha.decadas %}<tr><td>{{ d }}–{{ d + 9 }}</td><td class="num">{{ c | milhar }}</td></tr>{% endfor %}</tbody>
+            </table>
+        </div>
+    </details>
+</figure>
+{% endif %}
+
+{% if en %}{% include "_sobre_en.html" %}{% else %}
+<h3>1. Fontes</h3>
+<p>O que são o AHU, o Projeto Resgate, a Biblioteca Nacional, o ACTD e o MAPE, de onde vêm os resumos, as cotas e a tradução inglesa, e os links para os catálogos e os microfilmes estão na aba <a href="{{ url_for('referencias') }}">Referências</a>. O passo a passo da coleta do catálogo está em <a href="https://github.com/saulorrp/catalogo-ahu-brasil/blob/main/docs/METODO_COLETA.md" target="_blank">METODO_COLETA.md</a>.</p>
+<ul>
+    {% if base_atual() == "mape" %}<li><strong>Resumos e cotas:</strong> <em>MAPE: A Dataset of Correspondence from the Portuguese Empire</em>, versão 6, 2026, <a href="https://doi.org/10.5281/zenodo.24403753" target="_blank" rel="noopener">doi:10.5281/zenodo.24403753</a>, CC BY 4.0, que reproduz as descrições do AHU no DigitArq. Esta edição do catálogo usa a base aberta do MAPE; a edição com a base do ACTD está em <a href="https://catalogo-ahu.saulo-r.workers.dev/ahu/" target="_blank" rel="noopener">catalogo-ahu.saulo-r.workers.dev</a>.</li><li><strong>Links ao Projeto Resgate e ao DigitArq e cotas antigas:</strong> módulo de compatibilidade do Catálogo AHU-Brasil (<code>compat/</code>), CC BY 4.0.</li>{% else %}<li><strong>Resumos e cotas:</strong> catálogos do Arquivo Histórico Ultramarino publicados no <a href="https://actd.iict.pt/" target="_blank" rel="noopener">ACTD</a>, conferidos com o <a href="https://www.gov.br/bn/pt-br/central-de-conteudos/projeto-resgate" target="_blank" rel="noopener">Projeto Resgate</a>.</li>{% endif %}
+    <li><strong>Tradução inglesa:</strong> <em>MAPE: A Dataset of Correspondence from the Portuguese Empire</em>, do projeto Mapping the Atlantic Portuguese Empire (MAPE), versão 6, 2026, <a href="https://doi.org/10.5281/zenodo.24403753" target="_blank" rel="noopener">doi:10.5281/zenodo.24403753</a>, CC BY 4.0.</li>
+</ul>
+
+<h3 id="busca">2. Como a busca funciona</h3>
+<p>A busca combina três motores e funde os resultados pela <strong>posição</strong> de cada documento em cada motor, não por uma nota inventada.</p>
+<ul>
+    <li><strong>Cota.</strong> Se a consulta é uma cota, em qualquer das três formas (Resgate, código de referência ou cota antiga), a resposta é o documento dessa cota e mais nada. Se a cota aparece no meio de uma frase, o documento vem primeiro, e o resto da frase segue a busca normal.</li>
+    <li><strong>Palavras.</strong> Procura as palavras da consulta no resumo e nos campos do documento e ordena os resultados pela frequência e pela raridade de cada termo. Os campos têm pesos: tipologia 1,5, resumo 1,0 e pasta 0,5. Grafias antigas e acentos são normalizados (<code>ph</code>→<code>f</code>, <code>y</code>→<code>i</code>). Aspas pedem a frase exata.</li>
+    <li><strong>Sentido (semântica).</strong> Compara o significado da consulta com o de cada resumo, com o modelo multilíngue <code>multilingual-e5-small</code>. Acha documentos que tratam do assunto com outras palavras. O <strong>rigor</strong> define até onde, abaixo do documento mais próximo, um resultado ainda entra.</li>
+</ul>
+
+<p>No servidor próprio há um quarto passo: um <strong>reranker</strong> (o cross-encoder multilíngue <code>mmarco-mMiniLMv2-L12</code>) lê a consulta e cada um dos 30 primeiros resumos <em>juntos</em> e reordena esse topo. Por isso a lista aparece primeiro e, um instante depois, a ordem do topo pode mudar. Ele não tira nem acrescenta documentos, e não entra no modo <em>Exata</em> nem na ordenação por ano.</p>
+
+<h3 id="dados">3. O que o catálogo tem, e o que não tem</h3>
+<p>Cada documento traz o resumo do catálogo do AHU como foi publicado, as três formas de cota, a data, a pasta (capitania ou região) e a <strong>tipologia</strong> (carta, ofício, requerimento…), que é a primeira palavra do verbete, normalizada e marcada quando é rara no catálogo. Os erros da fonte não são corrigidos: ganham um <span class="sic">[sic]</span> na exibição.</p>
+{% if com_en %}<p>Para {{ com_en_mape | milhar }} documentos há também um <strong>resumo em inglês</strong>, a tradução publicada pelo projeto <em>Mapping the Atlantic Portuguese Empire</em> (MAPE; Błoch, Vasques Filho, Bojanowski, Santana, Hussain, Rzońca e Podsiadły, 2026). {% if base_atual() == "mape" %}A tradução é do MAPE, feita por eles com o Gemini 1.5 Flash, e aparece aqui exatamente como publicada.{% else %}A tradução é do MAPE, feita por eles com o Gemini 1.5 Flash, e aparece aqui exatamente como publicada. Ela só é mostrada quando o resumo português do MAPE é o mesmo do catálogo, para não pôr num documento a tradução de outro.{% endif %}</p>
+{% if com_en_catalogo %}<p>Para os outros {{ com_en_catalogo | milhar }} documentos, que o MAPE não traduz (resumos que só existem neste catálogo, verbetes sem código de referência, como os do Reino e dos Códices, e verbetes cujo resumo difere do MAPE), o resumo em inglês é uma <strong>tradução automática feita por este catálogo</strong> com o Google Gemini ({{ modelos_en | join(", ") }}). Ela segue um glossário fixo de tipologias (ofício é sempre OFFICIAL LETTER; requerimento, sempre PETITION), mantém os nomes como na fonte e não foi revisada. Esses resumos aparecem com a marca <span class="marca-traducao">machine translation</span> e crédito próprio; o comando dado ao modelo está em <a href="https://github.com/saulorrp/catalogo-ahu-brasil/blob/main/coleta/traducao_en/PROMPT.md" target="_blank" rel="noopener">PROMPT.md</a>.</p>{% endif %}{% endif %}
+<p>O catálogo não tem dados gerados por modelos de linguagem além dessas traduções inglesas, cada uma creditada em cada documento. Os modelos entram também na busca por sentido e na reordenação do topo, que não mudam nenhum dado.</p>
+
+<h3 id="licenca">Licença e crédito</h3>
+<p>Cada camada tem a sua licença (<a href="https://github.com/saulorrp/catalogo-ahu-brasil/blob/main/LICENSE-DATA.md" target="_blank" rel="noopener">LICENSE-DATA.md</a>). Código: MIT. Cotas, datas e outros fatos: CC0. Camadas próprias (tipologia normalizada, ligações aos acervos): CC BY 4.0. A tradução inglesa é do MAPE (Błoch, Vasques Filho, Bojanowski, Santana, Hussain, Rzońca e Podsiadły, 2026, <a href="https://doi.org/10.5281/zenodo.24403753" target="_blank" rel="noopener">doi:10.5281/zenodo.24403753</a>), sob CC BY 4.0; onde o MAPE não traduz, é a tradução automática do próprio catálogo, sob CC BY 4.0. {% if base_atual() == "mape" %}Os <strong>resumos</strong> são os do dataset do MAPE, sob CC BY 4.0, que reproduz as descrições do AHU no DigitArq; vale também o crédito ao Arquivo Histórico Ultramarino.{% else %}Os <strong>resumos</strong> são do catálogo do AHU publicado no ACTD e ficam fora da licença aberta: uso livre só para fins pessoais, educativos e de investigação, com crédito. Os textos do Projeto Resgate seguem a licença do portal gov.br (CC BY-ND 3.0).{% endif %}</p>
+<p>Dados derivados: Rocha, S. R. P. <em>Catálogo AHU-Brasil</em> (2026), doi:10.5281/zenodo.18772666, CC BY 4.0. {% if base_atual() == "mape" %}Base: Błoch, A. et al. <em>MAPE: A Dataset of Correspondence from the Portuguese Empire</em>, v6, 2026, doi:10.5281/zenodo.24403753, CC BY 4.0. Descrições de origem: Arquivo Histórico Ultramarino (Lisboa). Imagens: Projeto Resgate "Barão do Rio Branco" (Biblioteca Nacional / Ministério da Cultura).{% else %}Catálogo de origem: Arquivo Histórico Ultramarino (Lisboa), catálogos publicados no Arquivo Científico Tropical Digital (ACTD/IICT), e Projeto Resgate "Barão do Rio Branco" (Biblioteca Nacional / Ministério da Cultura).{% endif %}</p>
+{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,125 @@
+// catalogo.js — o pouco de JavaScript da interface. Tudo por delegação no documento: os
+// filtros e a gaveta da seleção são trocados pelo HTMX, e o que é trocado não perde o comportamento.
+
+(function () {
+    'use strict';
+
+    const form = () => document.getElementById('form-busca');
+    const enviar = () => { const f = form(); if (f && window.htmx) htmx.trigger(f, 'submit'); else if (f) f.submit(); };
+
+    // "/" leva o cursor à busca.
+    document.addEventListener('keydown', function (e) {
+        const el = document.activeElement;
+        const digitando = el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT');
+        if (e.key === '/' && !digitando) {
+            const input = document.getElementById('input-busca');
+            if (input) { e.preventDefault(); input.focus(); input.select(); }
+        }
+    });
+
+    // Os campos vazios do formulário não vão para o endereço (a1=&a2=&fu=…).
+    document.addEventListener('htmx:configRequest', function (e) {
+        const p = e.detail.parameters;
+        if (!p || typeof p.forEach !== 'function') return;
+        const vazios = [];
+        p.forEach(function (valor, chave) { if (valor === '') vazios.push(chave); });
+        vazios.forEach(function (chave) { p.delete(chave); });
+    });
+
+    document.addEventListener('click', function (e) {
+        // Barra de década no filtro de período: preenche o intervalo e busca.
+        const barra = e.target.closest('[data-decada]');
+        if (barra) {
+            const d = parseInt(barra.dataset.decada, 10);
+            const de = document.getElementById('f-a1'), ate = document.getElementById('f-a2');
+            if (de && ate) { de.value = d; ate.value = d + 9; enviar(); }
+            return;
+        }
+        // Abrir e fechar os filtros na tela estreita.
+        const alterna = e.target.closest('[data-alterna]');
+        if (alterna) {
+            const alvo = document.querySelector(alterna.dataset.alterna);
+            if (alvo) alvo.classList.toggle('aberto');
+            return;
+        }
+        // Copiar a cota, com a confirmação no próprio botão.
+        const copiar = e.target.closest('[data-copiar]');
+        if (copiar) {
+            const texto = copiar.dataset.copiar;
+            const confirmar = function () {
+                if (!copiar.dataset.antes) copiar.dataset.antes = copiar.textContent;
+                if (copiar.classList.contains('btn-icone')) {
+                    copiar.textContent = '✓';
+                    copiar.classList.add('copiado');
+                } else {
+                    const ingles = document.documentElement.lang === 'en';
+                    copiar.textContent = copiar.classList.contains('btn-copiar')
+                        ? (ingles ? '✓ Copied' : '✓ Copiado')
+                        : (ingles ? '✓ Shelfmark copied' : '✓ Cota copiada');
+                }
+                clearTimeout(copiar._timerCopiar);
+                copiar._timerCopiar = setTimeout(function () {
+                    copiar.textContent = copiar.dataset.antes;
+                    copiar.classList.remove('copiado');
+                    delete copiar.dataset.antes;
+                }, 1800);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(texto).then(confirmar).catch(function () { });
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = texto;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try { if (document.execCommand('copy')) confirmar(); } catch (_) { }
+                document.body.removeChild(ta);
+            }
+            return;
+        }
+    });
+
+    // Tema: automático (segue o sistema), papel ou escuro. Guardado neste navegador.
+    document.addEventListener('DOMContentLoaded', function () {
+        const escolha = document.getElementById('escolha-tema');
+        if (!escolha) return;
+        const salvo = document.documentElement.dataset.tema || '';
+        escolha.value = salvo === 'branco' ? 'papel' : salvo;
+        escolha.addEventListener('change', function () {
+            if (escolha.value) document.documentElement.dataset.tema = escolha.value;
+            else delete document.documentElement.dataset.tema;
+            try {
+                if (escolha.value) localStorage.setItem('ahu-tema', escolha.value);
+                else localStorage.removeItem('ahu-tema');
+            } catch (_) { /* sem armazenamento: vale só nesta página */ }
+        });
+    });
+
+    // A gaveta da seleção lembra, nesta aba do navegador, se a pessoa a fechou ou abriu.
+    const CHAVE = 'ahu-gaveta-selecao';
+    function lembrar() { try { return sessionStorage.getItem(CHAVE); } catch (_) { return null; } }
+    function aplicarGaveta() {
+        const g = document.getElementById('gaveta-selecao');
+        if (!g) return;
+        const escolha = lembrar();
+        if (escolha === 'aberta') g.open = true;
+        else if (escolha === 'fechada') g.open = false;
+        else if (window.matchMedia('(max-width: 1180px)').matches) g.open = false;   // estreita: começa fechada
+    }
+    document.addEventListener('toggle', function (e) {
+        if (e.target.id !== 'gaveta-selecao' || e.target.dataset.silencio) return;
+        try { sessionStorage.setItem(CHAVE, e.target.open ? 'aberta' : 'fechada'); } catch (_) { /* sem armazenamento */ }
+    }, true);
+    function aplicarEmSilencio() {
+        const g = document.getElementById('gaveta-selecao');
+        if (!g) return;
+        g.dataset.silencio = '1';
+        aplicarGaveta();
+        setTimeout(function () { delete g.dataset.silencio; }, 150);
+    }
+    document.addEventListener('DOMContentLoaded', aplicarEmSilencio);
+    document.addEventListener('htmx:oobAfterSwap', function (e) {
+        if (e.detail.target && e.detail.target.id === 'gaveta-selecao') aplicarEmSilencio();
+    });
+})();

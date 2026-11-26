@@ -1,0 +1,37 @@
+# Catálogo AHU no servidor próprio (agiulfo, ou qualquer Docker).
+# Passo a passo em deploy/SERVIDOR.md. Uso: docker compose up -d
+name: catalogo-ahu
+
+services:
+  app:
+    image: ghcr.io/saulorrp/catalogo-ahu-brasil:latest
+    restart: unless-stopped
+    ports:
+      # Só na própria máquina: o endereço público vem do Tailscale Funnel, que entrega
+      # https://<máquina>.<tailnet>.ts.net/ahu/ a este porto (deploy/SERVIDOR.md).
+      - "127.0.0.1:8502:7860"
+    volumes:
+      - modelo:/home/usuario/.cache/ahu-onnx   # e5 e reranker, baixados uma vez
+      # Os dados não vêm na imagem: a pasta app_dados/ da base (ACTD ou MAPE) é montada aqui, só
+      # para leitura. AHU_APP_DADOS aponta para ela (deploy/SERVIDOR.md, "Os dados").
+      - ${AHU_APP_DADOS:-./app_dados}:/app/app_dados:ro
+    environment:
+      AHU_ONNX_CACHE: /home/usuario/.cache/ahu-onnx
+      # A versão completa: e5 em fp32 e o reranker relendo o topo (docs/plano_busca_servidor.md).
+      AHU_RERANKER: "1"
+      # O app mora em /ahu/ no endereço do Funnel, ao lado de outros sites da máquina.
+      AHU_ROOT_PATH: /ahu
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    mem_limit: 4g
+
+  # Confere a cada hora se o GitHub publicou uma imagem nova e reinicia o app com ela.
+  watchtower:
+    image: containrrr/watchtower:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --label-enable --cleanup --interval 3600
+
+volumes:
+  modelo:
