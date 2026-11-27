@@ -82,6 +82,7 @@ python scripts/montar_base_mape.py --entrada dados/mape_dataset_version_6.csv
 # Base do ACTD (pasta privada do autor, ex. eins-project/catalogo-ahu-brasil-dados-actd/):
 python build/importar_colecao.py --entrada documentos.parquet --colecao ahu-brasil --corpus $ACTD/corpus
 python build/corrigir_com_lastro.py --ouro padrao_ouro.parquet --corpus $ACTD/corpus  # erros de leitura, com prova
+python build/aplicar_revisao_lastro.py --decisoes decisoes_650.jsonl --humano escolha.csv --corpus $ACTD/corpus  # casos "revisar"
 python build/importar_camadas.py --entrada documentos.parquet --colecao ahu-brasil --corpus $ACTD/corpus
 python build/importar_mape.py --entrada mape_dataset_version_6.csv --corpus $ACTD/corpus  # tradução (MAPE)
 python build/importar_traducao_catalogo.py --entrada $ACTD/coleta/traducao_en/traducao_en_catalogo_v1.jsonl.gz --corpus $ACTD/corpus
