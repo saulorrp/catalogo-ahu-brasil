@@ -32,7 +32,8 @@ app later runs offline.
 Compared with the online edition (167,327 entries), the MAPE edition has 145,103 entries: MAPE does
 not cover the Reino series, the Códices, Ultramar 035, Conselho Ultramarino 089 and a few smaller
 series, and part of its entries describe several documents at once (`…/00009.00019`), as DigitArq
-does.
+does. 96.6% of the MAPE entries link to a Projeto Resgate image. Details (in Portuguese, with English
+summaries): [`BASE_MAPE.md`](BASE_MAPE.md) and [`MODULOS.md`](MODULOS.md).
 
 Code: MIT. Compatibility module: CC BY 4.0. Entries and English translation: MAPE, CC BY 4.0, from the
 AHU descriptions in DigitArq. No MAPE data is redistributed by this project.
