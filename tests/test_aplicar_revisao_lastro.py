@@ -1,6 +1,6 @@
 import pandas as pd
 
-from build.aplicar_revisao_lastro import aplicar, nova_data
+from build.aplicar_revisao_lastro import aplicar, nova_data, preencher_notas
 
 
 def _base():
@@ -48,3 +48,18 @@ def test_data_sem_ano_nao_substitui_data_com_ano():
     assert nova_data("6. 1750, Maio, 14, Bahia", "Maio, 14, Bahia") is None
     assert nova_data("6. [ant. 1750 REQUERIMENTO", "[ant. 1750]") == "6. [ant. 1750]"
     assert nova_data("6. 1750, Maio, 14", "1750, Maio, 14") is None
+
+
+def test_notas_fonte_preenchidas_pelo_lastro():
+    base = _base()
+    base["notas_fonte"] = [None, "já tinha"]
+    ouro = pd.DataFrame([
+        {"id_lastro": "X#1", "anexo": "Anexo: 1 doc.", "obs": None, "nota": None,
+         "inventario": "Nº de inventário no catálogo: 9084", "remissao": None},
+        {"id_lastro": "X#2", "anexo": "Anexo: outro", "obs": None, "nota": None, "inventario": None,
+         "remissao": None},
+    ])
+    d = [{"id_lastro": "X#1", "doc_uid": "u:1"}, {"id_lastro": "X#2", "doc_uid": "u:2"}]
+    assert preencher_notas(base, d, ouro) == 1
+    assert base.at[0, "notas_fonte"] == "Anexo: 1 doc. | Nº de inventário no catálogo: 9084"
+    assert base.at[1, "notas_fonte"] == "já tinha"

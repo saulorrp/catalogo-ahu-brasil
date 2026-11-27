@@ -13,6 +13,9 @@ ACTD), B (banco, como estava) ou C (MAPE v6):
 
 Entrada : --decisoes  JSONL com id_lastro, doc_uid, fonte_decisao, escolha_resumo, escolha_data,
                       resumo e data (o texto da versão escolhida)
+          --ouro      (opcional) o padrao_ouro.parquet: preenche `notas_fonte` (Anexo, Obs., Nº de
+                      inventário…) dos documentos decididos que ainda não têm, para o rodapé que
+                      sai do resumo não se perder
           --humano    (opcional) CSV `;` exportado pela página de escolha, com doc_uid, P1_resumo,
                       P2_data, texto_escolhido e data_escolhida; vale para os `humano_pendente`
 Saídas  : documentos.parquet da coleção, corrigido no lugar, e as trocas acrescentadas a
@@ -42,7 +45,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 if str(RAIZ) not in sys.path:
     sys.path.insert(0, str(RAIZ))
 
-from build.corrigir_com_lastro import _vazio, espacos, especie  # noqa: E402
+from build.corrigir_com_lastro import _vazio, espacos, especie, notas  # noqa: E402
 from build.importar_base import atualizar_manifesto  # noqa: E402
 from build.importar_mape import texto_comparavel  # noqa: E402
 
@@ -86,6 +89,24 @@ def nova_data(antiga, escolhida) -> str | None:
     if _ANO.search(resto) and not _ANO.search(str(escolhida)):
         return None
     return espacos(f"{numero} {escolhida}")
+
+
+def preencher_notas(base: pd.DataFrame, decisoes: list[dict], ouro: pd.DataFrame) -> int:
+    """Preenche `notas_fonte` vazio com o rodapé do verbete (pelo id_lastro). Devolve quantos."""
+    if "notas_fonte" not in base.columns:
+        base["notas_fonte"] = pd.Series([None] * len(base), dtype=object)
+    por_id = ouro.drop_duplicates("id_lastro").set_index("id_lastro")
+    pos = {u: i for i, u in enumerate(base["doc_uid"])}
+    n = 0
+    for d in decisoes:
+        i, idl = pos.get(d.get("doc_uid")), d.get("id_lastro")
+        if i is None or idl not in por_id.index or not _vazio(base.at[i, "notas_fonte"]):
+            continue
+        texto = notas(por_id.loc[idl])
+        if texto:
+            base.at[i, "notas_fonte"] = texto
+            n += 1
+    return n
 
 
 def aplicar(base: pd.DataFrame, decisoes: list[dict], humano: dict | None = None,
@@ -152,6 +173,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--decisoes", required=True, type=Path)
     ap.add_argument("--humano", type=Path)
+    ap.add_argument("--ouro", type=Path)
     ap.add_argument("--colecao", default="ahu-brasil")
     ap.add_argument("--corpus", default=RAIZ / "corpus", type=Path)
     a = ap.parse_args(argv)
@@ -163,7 +185,10 @@ def main(argv=None) -> int:
     feitos = set(log.loc[log["motivo"].astype(str).str.startswith("revisar:"), "doc_uid"])
     humano = ler_humano(a.humano) if a.humano else None
 
-    nova, trocas, contagem = aplicar(base, ler_decisoes(a.decisoes), humano, feitos)
+    decisoes = ler_decisoes(a.decisoes)
+    nova, trocas, contagem = aplicar(base, decisoes, humano, feitos)
+    if a.ouro:
+        contagem["notas_fonte_preenchidas"] = preencher_notas(nova, decisoes, pd.read_parquet(a.ouro))
     nova.to_parquet(pasta / "documentos.parquet", index=False)
     pd.concat([log, trocas], ignore_index=True).to_parquet(arq_log, index=False)
 
