@@ -66,6 +66,28 @@ segundos (`AHU_ESPERA_MAXIMA`). Acima disso o app responde 429 com uma página q
 Fichas, páginas fixas e a página inicial nunca são freadas. O visitante é reconhecido pelo
 cabeçalho `X-Visitante-IP`, que o Worker preenche com o IP real. `AHU_LIMITE=0` desliga o freio.
 
+## Modo anônimo
+
+Para a avaliação cega de um artigo sobre o catálogo, o site pode esconder a autoria. Com
+`AHU_ANONIMO=1`:
+
+- o rodapé e a aba Sobre trocam o crédito ("Pacheco Rocha, S. R., [...], doi:10.5281/zenodo.18772666")
+  por "Autoria omitida para a avaliação cega";
+- os links para o GitHub (aba Referências e aba Sobre) viram texto sem link;
+- o botão "Reportar erro" abre o e-mail sem destinatário e sem o endereço público do site, a menos
+  que `AHU_EMAIL_ERRO` e `AHU_URL_PUBLICA` sejam dados.
+
+O nome não fica escondido na página: ele não é enviado. Para ligar, no agiulfo, na pasta do
+`docker-compose.yml`:
+
+```
+echo "AHU_ANONIMO=1" >> .env
+docker compose up -d app
+```
+
+Para desligar, troque o 1 por 0 no `.env` e rode o mesmo `docker compose up -d app`. O teste
+`tests/test_web.py::test_modo_anonimo_esconde_o_autor` confere as páginas nos dois modos.
+
 ## Tirar do ar
 
     sudo tailscale funnel --set-path /ahu off       # só o endereço público

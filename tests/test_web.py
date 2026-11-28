@@ -403,3 +403,24 @@ def test_api_e_sobre_separam_as_traducoes(client_en_catalogo):
     sobre = client.get("/sobre").text
     assert "tradução automática feita por este catálogo" in sobre
     assert "gemini-4-hydrogen-low" in sobre
+
+
+@pytest.mark.parametrize("anonimo", [False, True])
+def test_modo_anonimo_esconde_o_autor(client, corpus_busca, monkeypatch, anonimo):
+    """AHU_ANONIMO=1 (avaliação cega): nenhuma página mostra o nome, o e-mail ou o GitHub do autor."""
+    from ahu import links
+
+    monkeypatch.setattr(links, "ANONIMO", anonimo)
+    monkeypatch.setattr(links, "EMAIL_ERRO", "" if anonimo else "saulorrp@gmail.com")
+    monkeypatch.setattr(links, "URL_PUBLICA", "" if anonimo else "https://catalogo-ahu.saulo-r.workers.dev/ahu")
+    uid = corpus_busca.documentos.iloc[0]["doc_uid"]
+    marcas = ("Pacheco Rocha", "saulorrp", "saulo-r", "zenodo.18772666")
+    for idioma in ("pt", "en"):
+        client.get(f"/idioma/{idioma}")
+        for rota in ("/busca?q=gado", f"/doc/{uid}", "/sobre", "/referencias", "/conversor", "/selecao"):
+            texto = client.get(rota).text
+            achadas = [m for m in marcas if m in texto]
+            if anonimo:
+                assert not achadas, (idioma, rota, achadas)
+            elif rota == "/sobre":
+                assert "Pacheco Rocha" in texto
