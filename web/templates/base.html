@@ -54,8 +54,8 @@
     <footer class="rodape">
         <ul class="rodape-itens">
             {% if en %}
-            <li><span class="rodape-rotulo">Derived data:</span> Pacheco Rocha, S. R., <em>Catálogo AHU-Brasil</em> (2026),
-                <a href="https://doi.org/10.5281/zenodo.18772666" target="_blank" rel="noopener">doi:10.5281/zenodo.18772666</a>, CC BY 4.0</li>
+            {% if modo_anonimo() %}<li><span class="rodape-rotulo">Derived data:</span> Authorship omitted for blind review</li>{% else %}            <li><span class="rodape-rotulo">Derived data:</span> Pacheco Rocha, S. R., <em>Catálogo AHU-Brasil</em> (2026),
+                <a href="https://doi.org/10.5281/zenodo.18772666" target="_blank" rel="noopener">doi:10.5281/zenodo.18772666</a>, CC BY 4.0</li>{% endif %}
             {% if base_atual() == "mape" %}<li><span class="rodape-rotulo">Summaries, shelfmarks and English translation:</span> MAPE dataset (Błoch et al.), <a href="https://doi.org/10.5281/zenodo.24403753" target="_blank" rel="noopener">doi:10.5281/zenodo.24403753</a>, CC BY 4.0, from the AHU descriptions in DigitArq</li>{% else %}<li><span class="rodape-rotulo">Summaries and shelfmarks:</span> Arquivo Histórico Ultramarino (Lisbon), catalogues published in the ACTD/IICT</li>{% endif %}
             <li><span class="rodape-rotulo">Images and links:</span> Projeto Resgate "Barão do Rio Branco" (Biblioteca Nacional, Brazil)</li>
             {% if base_atual() == "mape" %}{% else %}<li><span class="rodape-rotulo">English translation:</span> MAPE project (Błoch et al.),
@@ -63,8 +63,8 @@
                 where MAPE has none, machine translation by this catalogue (Google Gemini)</li>{% endif %}
             <li><a href="{{ url_for('sobre') }}#licenca">Licences</a></li>
             {% else %}
-            <li><span class="rodape-rotulo">Dados derivados:</span> Pacheco Rocha, S. R., <em>Catálogo AHU-Brasil</em> (2026),
-                <a href="https://doi.org/10.5281/zenodo.18772666" target="_blank" rel="noopener">doi:10.5281/zenodo.18772666</a>, CC BY 4.0</li>
+            {% if modo_anonimo() %}<li><span class="rodape-rotulo">Dados derivados:</span> Autoria omitida para a avaliação cega</li>{% else %}            <li><span class="rodape-rotulo">Dados derivados:</span> Pacheco Rocha, S. R., <em>Catálogo AHU-Brasil</em> (2026),
+                <a href="https://doi.org/10.5281/zenodo.18772666" target="_blank" rel="noopener">doi:10.5281/zenodo.18772666</a>, CC BY 4.0</li>{% endif %}
             {% if base_atual() == "mape" %}<li><span class="rodape-rotulo">Resumos, cotas e tradução inglesa:</span> dataset do MAPE (Błoch et al.), <a href="https://doi.org/10.5281/zenodo.24403753" target="_blank" rel="noopener">doi:10.5281/zenodo.24403753</a>, CC BY 4.0, a partir das descrições do AHU no DigitArq</li>{% else %}<li><span class="rodape-rotulo">Resumos e cotas:</span> Arquivo Histórico Ultramarino (Lisboa), catálogos publicados no ACTD/IICT</li>{% endif %}
             <li><span class="rodape-rotulo">Imagens e links:</span> Projeto Resgate "Barão do Rio Branco" (Biblioteca Nacional)</li>
             {% if base_atual() == "mape" %}{% else %}<li><span class="rodape-rotulo">Tradução inglesa:</span> projeto MAPE (Błoch et al.),

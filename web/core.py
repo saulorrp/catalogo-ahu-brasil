@@ -59,6 +59,7 @@ templates.env.filters["id_seguro"] = _id_seguro
 templates.env.globals["conta_selecao"] = conta_selecao
 templates.env.globals["base_atual"] = base_atual
 templates.env.globals["email_de_documento"] = links.email_de_documento
+templates.env.globals["modo_anonimo"] = lambda: links.ANONIMO
 templates.env.globals["tr"] = idioma.tr
 templates.env.filters["en"] = idioma.filtro_en
 

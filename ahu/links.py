@@ -72,8 +72,13 @@ def referencia_crav(texto: str | None) -> str | None:
 # "Reportar erro" abre o e-mail do leitor, endereçado ao autor: quem lê o catálogo raramente tem
 # conta no GitHub. `AHU_EMAIL_ERRO` deixa um fork trocar o endereço, e
 # `AHU_URL_PUBLICA` é o endereço do app citado na mensagem.
-EMAIL_ERRO = os.environ.get("AHU_EMAIL_ERRO", "saulorrp@gmail.com")
-URL_PUBLICA = os.environ.get("AHU_URL_PUBLICA", "https://catalogo-ahu.saulo-r.workers.dev/ahu").rstrip("/")
+# `AHU_ANONIMO=1` é o modo de avaliação cega (pareceristas de um artigo sobre o catálogo): o site
+# não mostra o nome do autor nem links que o identifiquem, e o e-mail sai sem destinatário e sem o
+# endereço público, a menos que `AHU_EMAIL_ERRO` e `AHU_URL_PUBLICA` sejam dados explicitamente.
+ANONIMO = os.environ.get("AHU_ANONIMO", "").strip().lower() in {"1", "true", "sim", "yes"}
+EMAIL_ERRO = os.environ.get("AHU_EMAIL_ERRO", "" if ANONIMO else "saulorrp@gmail.com")
+URL_PUBLICA = os.environ.get(
+    "AHU_URL_PUBLICA", "" if ANONIMO else "https://catalogo-ahu.saulo-r.workers.dev/ahu").rstrip("/")
 
 
 def _email(assunto: str, linhas: list[str], destino: str | None = None) -> str:
@@ -94,7 +99,7 @@ def email_de_documento(doc_uid: str, cota: str | None = None, titulo: str | None
         f"Cota: {cota or '—'}",
         f"Título: {titulo or '—'}",
         f"Identificador: {doc_uid}",
-        f"Página: {URL_PUBLICA}/doc/{doc_uid}",
+        *([f"Página: {URL_PUBLICA}/doc/{doc_uid}"] if URL_PUBLICA else []),
         "",
         "O que está errado:",
         "",

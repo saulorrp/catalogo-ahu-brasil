@@ -21,6 +21,9 @@ services:
       AHU_RERANKER: "1"
       # O app mora em /ahu/ no endereço do Funnel, ao lado de outros sites da máquina.
       AHU_ROOT_PATH: /ahu
+      # Avaliação cega de artigo: 1 tira do site o nome, o e-mail e o GitHub do autor
+      # (deploy/SERVIDOR.md, "Modo anônimo"). Volta ao normal com 0.
+      AHU_ANONIMO: ${AHU_ANONIMO:-0}
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     mem_limit: 4g
