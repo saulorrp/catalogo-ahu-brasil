@@ -19,8 +19,8 @@ Há duas bases:
 - **MAPE** (aberta, CC BY 4.0): `python scripts/montar_base_mape.py --entrada dados/mape_dataset_version_6.csv`
   monta tudo aqui e em `app_dados/`. Ver [`docs/REPRODUZIR.md`](../docs/REPRODUZIR.md).
 - **ACTD** (a do site): os resumos são do AHU, publicados no ACTD, e os termos do ACTD não permitem
-  redistribuí-los sob licença aberta. A base fica numa pasta privada do autor e num registro de
-  acesso restrito no Zenodo. Com ela em mãos, use `--corpus <pasta da base>/corpus` nos scripts de
+  redistribuí-los sob licença aberta. A base fica só numa pasta privada do autor, fora de servidores
+  de terceiros, e é cedida a pedido para pesquisa. Com ela em mãos, use `--corpus <pasta da base>/corpus` nos scripts de
   `build/`.
 
 As tabelas que ligam as cotas ao Projeto Resgate e ao DigitArq **não** ficam aqui: estão em

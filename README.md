@@ -75,8 +75,10 @@ O catálogo tem três partes, e só duas delas estão aqui ([`docs/MODULOS.md`](
 Há duas bases possíveis:
 
 - **ACTD**, a do site: montada a partir dos catálogos que o AHU publica no ACTD. Os termos do ACTD
-  não permitem redistribuir os resumos sob licença aberta, e por isso ela fica numa pasta privada
-  do autor e num registro de acesso restrito no Zenodo.
+  não permitem redistribuir os resumos sob licença aberta, e por isso ela fica só numa pasta privada
+  do autor, fora de servidores de terceiros, e é cedida a pedido para pesquisa. As versões 1.0 e
+  2.0 do registro no Zenodo, de acesso restrito, são do experimento anterior, restrito à
+  Macrorregião Sul, e não contêm esta base.
 - **MAPE**, aberta: os verbetes do dataset do projeto MAPE (CC BY 4.0). Qualquer pessoa pode montar
   o catálogo com ela seguindo [`docs/REPRODUZIR.md`](docs/REPRODUZIR.md). A edição fica um pouco
   menor (145.103 verbetes), sem a Série Reino, os Códices e outras séries que o MAPE não cobre
