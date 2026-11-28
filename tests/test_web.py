@@ -422,5 +422,17 @@ def test_modo_anonimo_esconde_o_autor(client, corpus_busca, monkeypatch, anonimo
             achadas = [m for m in marcas if m in texto]
             if anonimo:
                 assert not achadas, (idioma, rota, achadas)
+                assert "mailto:" not in texto, (idioma, rota)
             elif rota == "/sobre":
                 assert "Pacheco Rocha" in texto
+
+
+def test_modo_anonimo_desativa_reportar_erro(client, corpus_busca, monkeypatch):
+    from ahu import links
+
+    monkeypatch.setattr(links, "ANONIMO", True)
+    uid = corpus_busca.documentos.iloc[0]["doc_uid"]
+    client.get("/idioma/pt")
+    texto = client.get(f"/doc/{uid}").text
+    assert 'aria-disabled="true"' in texto
+    assert 'title="Desativado para revisão cega"' in texto

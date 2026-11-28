@@ -259,6 +259,8 @@ button:disabled { opacity: 0.5; cursor: default; }
 
 .btn-texto, button.btn-texto { border: none; background: none; padding: 6px 4px; color: var(--txt-secondary); text-decoration: underline; }
 .btn-texto:hover, button.btn-texto:hover { background: none; color: var(--accent-texto); }
+/* Modo anônimo (AHU_ANONIMO=1): "Reportar erro" aparece, mas desativado, com a explicação no title. */
+.btn-texto.btn-desativado, .btn-texto.btn-desativado:hover { color: var(--txt-secondary); opacity: 0.5; text-decoration: none; cursor: not-allowed; }
 
 /* O botão da seleção: contorno bordô quando o documento está fora, cheio quando está dentro. */
 .btn-sel { border-color: var(--accent-texto); color: var(--accent-texto); font-weight: 600; }

@@ -74,8 +74,8 @@ Para a avaliação cega de um artigo sobre o catálogo, o site pode esconder a a
 - o rodapé e a aba Sobre trocam o crédito ("Pacheco Rocha, S. R., [...], doi:10.5281/zenodo.18772666")
   por "Autoria omitida para a avaliação cega";
 - os links para o GitHub (aba Referências e aba Sobre) viram texto sem link;
-- o botão "Reportar erro" abre o e-mail sem destinatário e sem o endereço público do site, a menos
-  que `AHU_EMAIL_ERRO` e `AHU_URL_PUBLICA` sejam dados.
+- o botão "Reportar erro" aparece desativado, com a explicação "Desativado para revisão cega" ao
+  passar o mouse (a página não leva o e-mail nem o endereço público do site).
 
 O nome não fica escondido na página: ele não é enviado. Para ligar, no agiulfo, na pasta do
 `docker-compose.yml`:
