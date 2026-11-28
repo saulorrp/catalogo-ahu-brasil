@@ -59,7 +59,7 @@
             {% endif %}
 
             <div class="resultado-meta-acoes">
-                <a href="{{ email_de_documento(f.doc_uid, cota_principal, f.titulo) }}" class="btn-texto">{{ tr("Reportar erro", "Report an error") }}</a>
+                {% if modo_anonimo() %}<span class="btn-texto desativado" aria-disabled="true" title="{{ tr("Desativado para revisão cega", "Disabled for blind review") }}">{{ tr("Reportar erro", "Report an error") }}</span>{% else %}<a href="{{ email_de_documento(f.doc_uid, cota_principal, f.titulo) }}" class="btn-texto">{{ tr("Reportar erro", "Report an error") }}</a>{% endif %}
             </div>
         </div>
     </details>

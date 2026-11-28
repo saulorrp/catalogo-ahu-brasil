@@ -422,5 +422,8 @@ def test_modo_anonimo_esconde_o_autor(client, corpus_busca, monkeypatch, anonimo
             achadas = [m for m in marcas if m in texto]
             if anonimo:
                 assert not achadas, (idioma, rota, achadas)
+                if rota in ("/busca?q=gado", f"/doc/{uid}"):
+                    assert "mailto:" not in texto and 'aria-disabled="true"' in texto
+                    assert ("Desativado para revisão cega" if idioma == "pt" else "Disabled for blind review") in texto
             elif rota == "/sobre":
                 assert "Pacheco Rocha" in texto

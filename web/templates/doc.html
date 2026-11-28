@@ -24,7 +24,7 @@
         {% set uid = ficha.doc_uid %}
         {% include "_botao_selecao.html" %}
         <button type="button" class="btn" data-copiar="{{ cota_principal }}">{{ tr("Copiar a cota", "Copy the shelfmark") }}</button>
-        <a href="{{ email_de_documento(ficha.doc_uid, cota_principal, ficha.titulo) }}" class="btn-texto empurra">{{ tr("Reportar erro", "Report an error") }}</a>
+        {% if modo_anonimo() %}<span class="btn-texto desativado empurra" aria-disabled="true" title="{{ tr("Desativado para revisão cega", "Disabled for blind review") }}">{{ tr("Reportar erro", "Report an error") }}</span>{% else %}<a href="{{ email_de_documento(ficha.doc_uid, cota_principal, ficha.titulo) }}" class="btn-texto empurra">{{ tr("Reportar erro", "Report an error") }}</a>{% endif %}
     </div>
 
     <div class="doc-meta">
